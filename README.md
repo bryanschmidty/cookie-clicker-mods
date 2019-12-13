@@ -18,6 +18,14 @@ This will give you more information on possible Egg Drops you could have receive
 
 ---
 
+## Draw Mod
+
+This rewrites part of the Game.Draw function. You will need to load the Epic Cookie mod as this uses some of the functions of that mod. 
+
+This displays the number of cookies you have including what the Wrinklers have eaten. Also the prestige points you would have if you popped all the wrinklers.
+
+---
+
 ## Epic Cookie
 
 This is actually a collection of a few mods into one JS object, `epicCookie`. 
