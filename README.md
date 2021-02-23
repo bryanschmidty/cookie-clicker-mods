@@ -1,38 +1,47 @@
-# Cookie Clicker Mods
+# Epic Cookie Mod
 
-This repository is meant to be a collection of non-cheating mods for the best browser game on the internet: Cookie Clicker. The goal of these mods is to enhance the gameplay without breaking original game logic or cheating.
+This is a non-cheating Mod for Cookie Clicker. It can assist in the small stuff to help during the idle parts of the game, so your cookie empire continues to grow while you work/sleep/play, etc.
 
-Each mod is explained below
-
----
-
-## Wrinkler Complaints Mod
-
-Each time you click a wrinkler, it will say something.
+If you find any features in this mod that are buggy, or seem to be too cheaty, please feel free to leave me some feedback.
 
 ---
+## Installation
 
-## Drop Egg Mod
-
-This will give you more information on possible Egg Drops you could have received.
-
----
-
-## Draw Mod
-
-This rewrites part of the Game.Draw function. You will need to load the Epic Cookie mod as this uses some of the functions of that mod. 
-
-This displays the number of cookies you have including what the Wrinklers have eaten. Also the prestige points you would have if you popped all the wrinklers.
+- Open the developer console for Chrome
+- Copy and paste the entire `epicCookie.js` file into the Console.
 
 ---
+## Features
 
-## Epic Cookie
+### More Visible Stats
 
-This is actually a collection of a few mods into one JS object, `epicCookie`. 
+This shows you total number of cookies including those from Wrinkler multiplication. Also shows you the Prestige level you would be at once all your Wrinklers are popped.
 
 ### Cookie Shield
 
-The initial feature of the EpicCookie mod was a Cookie Shield. It raises a shield over the big cookie when Shimmering Veil is active, to prevent any accidental clicks.
+This was the first mod I created and is what began my journey into creating Epic Cookie. It raises a shield over the big cookie when Shimmering Veil is active, to prevent any accidental clicks.
+
+### Auto Upgrade Purchasing
+
+This feature will auto-buy any upgrades you can afford
+
+### Auto Building Purchasing
+
+This feature will auto-buy buildings you can afford, and can even keep them in neat intervals of a number you choose (10, 100, etc)
+
+### Auto Dragon Levelling
+
+This feature will auto buy dragon levels for you
+
+To-do: Auto populate the Dragon Auras
+
+### Auto Santa Levelling
+
+This feature will auto buy santa levels for you
+
+### Drop Egg Notification
+
+This will give you more information on possible Egg Drops you could have received.
 
 ### Wrinkler Popper
 
