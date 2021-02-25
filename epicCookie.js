@@ -28,15 +28,42 @@ var epicCookie = {
 		getMenu: function() {
 			return '<div class="section">EpicCookie Settings</div>' +
 				'<div class="subsection">'+
-				'<div class="title">General</div>' +
-				Game.WriteButton('epicUpgrades', 'epicUpgrades', 'Auto Upgrades ON', 'Auto Upgrades OFF', 'epicCookie.autoBuyUpgrades.toggle();') +
-				'<label>Will automatically buy upgrades when you can afford them</label><br />' +
-				Game.WriteButton('epicBuildings', 'epicBuildings', 'Auto Buildings ON', 'Auto Buildings OFF', 'epicCookie.autoBuyBuildings.toggle();') +
-				'<label>Will automatically buy buildings when you can afford them</label><br />' +
-				Game.WriteButton('epicDragon', 'epicDragon', 'Auto Dragon ON', 'Auto Dragon OFF', 'epicCookie.autoBuyDragonLevels.toggle();') +
-				'<label>Will automatically buy dragon levels when you can afford them</label><br />' +
-				Game.WriteButton('epicSanta', 'epicSanta', 'Auto Santa ON', 'Auto Santa OFF', 'epicCookie.autoBuySantaLevels.toggle();') +
-				'<label>Will automatically buy santa levels when you can afford them</label><br />';
+					'<div class="title">Main Features</div>' +
+					'<div class="listing">'+
+						Game.WriteButton('epicUpgrades', 'epicUpgrades', 'Auto Upgrades ON', 'Auto Upgrades OFF', 'epicCookie.autoBuyUpgrades.toggle();') +
+						'<label>Will automatically buy upgrades when you can afford them</label><br />' +
+						Game.WriteButton('epicBuildings', 'epicBuildings', 'Auto Buildings ON', 'Auto Buildings OFF', 'epicCookie.autoBuyBuildings.toggle();') +
+						'<label>Will automatically buy buildings when you can afford them</label><br />' +
+						Game.WriteButton('epicDragon', 'epicDragon', 'Auto Dragon ON', 'Auto Dragon OFF', 'epicCookie.autoBuyDragonLevels.toggle();') +
+						'<label>Will automatically buy dragon levels when you can afford them</label><br />' +
+						Game.WriteButton('epicSanta', 'epicSanta', 'Auto Santa ON', 'Auto Santa OFF', 'epicCookie.autoBuySantaLevels.toggle();') +
+						'<label>Will automatically buy santa levels when you can afford them</label><br />' +
+						Game.WriteButton('epicWrinklerPopper', 'epicWrinklerPopper', 'Wrinkler Popper ON', 'Wrinkler Popper OFF', 'epicCookie.wrinklerPopper.toggle();') +
+						'<label>[Doesn\'t work yet] Gives you a button to pop all wrinklers.</label><br />' +
+						Game.WriteButton('epicCookieShield', 'epicCookieShield', 'Cookie Shield ON', 'Cookie Shield OFF', 'epicCookie.cookieShield.toggle();') +
+						'<label>Places a shield over the big cookie when you have Shimmering Veil. Prevents accidental clicks.</label><br />' +
+						Game.WriteButton('epicAutoWizardry', 'epicAutoWizardry', 'Auto Wizardry ON', 'Auto Wizardry OFF', 'epicCookie.wizardry.toggle();') +
+						'<label>Automatically casts a spell of your choice when your magic meter is full.</label><br />' +
+						Game.WriteButton('epicSugarFrenzy', 'epicSugarFrenzy', 'Sugar Frenzy Protect ON', 'Sugar Frenzy Protect OFF', 'epicCookie.sugarFrenzy.toggle();') +
+						'<label>Won\'t let you ascend if you haven\'t run Sugar Frenzy yet.</label><br />' +
+					'</div>'+
+				'</div>'+
+
+				'<div class="subsection">'+
+					'<div class="title">Misc</div>'+
+				'</div>' +
+				'<div class="subsection update">'+
+					'<div class="title">To-do List</div>'+
+					'<div class="listing">&bull; Wrinkler Popper: finish. add option to save shiny wrinklers</div>'+
+					'<div class="listing">&bull; Auto Wizardry: Allow for selection of spell that is cast</div>'+
+					'<div class="listing">&bull; Auto Upgrades: auto select "Yes" on One Mind updrade</div>'+
+					'<div class="listing">&bull; Auto Buildings: Set chunk size</div>'+
+					'<div class="listing">&bull; Auto Dragon: automatically equip user-selected Dragon Auras</div>'+
+					'<div class="listing">&bull; Add Auto-Season feature</div>'+
+					'<div class="listing">&bull; Integrate <a href="https://github.com/Acharvak/Cookie-Clicker-Agronomicon">Agronomicon mod</a></div>'+
+					'<div class="listing">&bull; Auto-backup save in cloud</div>'+
+					'<div class="listing">&bull; Run Idle in cloud (small service fee for servers - $1/month?)</div>'+
+				'</div>';
 		},
 		get: function(name) {
 
@@ -589,8 +616,8 @@ var epicCookie = {
 				hash: 900140325,
 				newFunction: bypass =>
 				{
-					if (!Game.Upgrades['Sugar frenzy'].bought) {
-						Game.Notify('Sugar Frenzy Block','You have not used Sugar Frenzy yet this ascension!',[22,17],4);
+					if (!epicCookie.sugarFrenzy.canAscend()) {
+						Game.Notify('Sugar Frenzy Block','You have not used Sugar Frenzy yet this ascension! (You can turn off Sugar Frenzy Protect in the Epic Settings menu.)',[22,17],4);
 						return;
 					}
 					if (!bypass) Game.Prompt('<h3>Ascend</h3><div class="block">Do you REALLY want to ascend?<div class="line"></div>You will lose your progress and start over from scratch.<div class="line"></div>All your cookies will be converted into prestige and heavenly chips.<div class="line"></div>You will keep your achievements'+(Game.canLumps()?', building levels and sugar lumps':'')+'.</div>',[['Yes!','Game.ClosePrompt();Game.Ascend(1);'],'No']);
@@ -981,14 +1008,23 @@ var epicCookie = {
 		}
 	},
 	wrinklerPopper: {
+		enabled: false,
 		wrinklerPopperId: "wrinklerPopper",
 		popperImage: "https://i.pinimg.com/originals/6a/aa/80/6aaa806cc939c049ed9c2bf4e99c9303.png",
 		init: function() {
-			this.create();
+			Game.prefs.epicWriklerPopper = this.enabled;
+			this.update();
+		},
+		toggle: function() {
+			this.enabled = !this.enabled;
+			this.update();
+		},
+		update: function() {
+			let exists = this.exists();
+			if (!this.enabled && exists) this.destroy();
+			else if (this.enabled && !exists) this.create();
 		},
 		create: function() {
-			if (this.exists()) return false;
-
 			var wrinklerPopper = document.createElement('div');
 			wrinklerPopper.id = this.wrinklerPopperId;
 
@@ -1006,10 +1042,7 @@ var epicCookie = {
 			document.getElementById("sectionLeft").appendChild(wrinklerPopper);
 		},
 		destroy: function() {
-			if (!this.exists()) return false;
-
-			var wrinklerPopper = document.getElementById(this.wrinklerPopper);
-			cookieShield.parentNode.removeChild(wrinklerPopper);
+			document.getElementById(this.wrinklerPopper).remove();
 		},
 		exists: function() {
 			return document.getElementById(this.wrinklerPopperId) !== null;
@@ -1022,6 +1055,7 @@ var epicCookie = {
 		}
 	},
 	cookieShield: {
+		enabled: true,
 		cookieShieldId: "cookieShield",
 		shieldImages: [
 			"https://cdn1.iconfinder.com/data/icons/arms-and-armor-color/300/17-512.png"
@@ -1030,28 +1064,21 @@ var epicCookie = {
 		autoCheckShimmeringVeil: 1,
 		checkedCount: 0,
 		init: function() {
-			if (this.autoCheckShimmeringVeil !== 1) return false;
-
-			setTimeout(() => { this.checkShimmeringVeil(); }, 1000);
+			Game.prefs.epicCookieShield = this.enabled;
 		},
-		turnOff: function() {
-			this.autoCheckShimmeringVeil = 0;
-			this.destroy();
+		toggle: function() {
+			this.enabled = !this.enabled;
+			if (!this.enabled && this.exists()) this.destroy();
 		},
-		checkShimmeringVeil: function() {
-			this.checkedCount += 1;
-			if (!Game.Has('Shimmering veil')) return false;
-			if (Game.Has('Shimmering veil [on]')) this.destroy();
-			if (Game.Has('Shimmering veil [off]')) this.create();
-
-			this.init();
+		loop: function() {
+			let exists = this.exists();
+			if ((!Game.Has('Shimmering veil') || Game.Has('Shimmering veil [on]')) && exists) this.destroy();
+			if (Game.Has('Shimmering veil [off]') && !exists) this.create();
 		},
 		exists: function() {
 			return document.getElementById(this.cookieShieldId) !== null;
 		},
 		create: function() {
-			if (this.exists()) return false;
-
 			var cookieShield = document.createElement('div');
 			cookieShield.id = this.cookieShieldId;
 
@@ -1069,21 +1096,18 @@ var epicCookie = {
 			document.getElementById("sectionLeft").appendChild(cookieShield);
 		},
 		destroy: function() {
-			if (!this.exists()) return false;
-			var cookieShield = document.getElementById(this.cookieShieldId);
-			cookieShield.parentNode.removeChild(cookieShield);
+			document.getElementById(this.cookieShieldId).remove();
 		}
 	},
 	wizardry: {
-		miniGame: Game.Objects["Wizard tower"].minigame,
 		enabled: true,
+		miniGame: Game.Objects["Wizard tower"].minigame,
+		spellOfChoice: 'conjure baked goods',
 		init: function() {
-			// no init
+			Game.prefs.epicAutoWizardry = this.enabled;
 		},
-
-		cast: function() {
-			spell = Game.Objects["Wizard tower"].minigame.spells['conjure baked goods'];
-			Game.Objects["Wizard tower"].minigame.castSpell(spell);
+		toggle: function() {
+			this.enabled = !this.enabled;
 		},
 		loop: function() {
 			if (!Game.Objects["Wizard tower"].minigameLoaded) {
@@ -1093,6 +1117,10 @@ var epicCookie = {
 			if (this.miniGame.magic == this.miniGame.magicM) {
 				this.cast();
 			}
+		},
+		cast: function() {
+			spell = Game.Objects["Wizard tower"].minigame.spells[this.spellOfChoice];
+			Game.Objects["Wizard tower"].minigame.castSpell(spell);
 		}
 	},
 	stats: {
@@ -1193,7 +1221,7 @@ var epicCookie = {
 		}
 	},
 	autoBuyDragonLevels: {
-		enabled: true,
+		enabled: false,
 		init: function() {
 			Game.prefs.epicDragon = this.enabled;
 		},
@@ -1205,7 +1233,7 @@ var epicCookie = {
 		}
 	},
 	autoBuySantaLevels: {
-		enabled: true,
+		enabled: false,
 		init: function() {
 			Game.prefs.epicSanta = this.enabled;
 		},
@@ -1214,6 +1242,19 @@ var epicCookie = {
 		},
 		loop: function() {
 			if (Game.Has('A festive hat')) Game.UpgradeSanta();
+		}
+	},
+	sugarFrenzy: {
+		enabled: true,
+		init: function() {
+			Game.prefs.epicSugarFrenzy = this.enabled;
+		},
+		toggle: function() {
+			this.enabled = !this.enabled
+		},
+		canAscend: function() {
+			if (!this.enabled || !Game.Upgrades['Sugar frenzy'].unlocked) return true;
+			return Game.Upgrades['Sugar frenzy'].bought;
 		}
 	}
 };
