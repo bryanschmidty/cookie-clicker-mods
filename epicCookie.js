@@ -1,6 +1,6 @@
 var epicCookie = {
 	version: 0.6,
-	cookieClickerVersion: 2.031,
+	cookieClickerVersion: 2.048,
 	loopInterval: 1000,
 	init: function() {
 		if (typeof Game !== "object") return console.log("The Cookie Clicker 'Game' object is not available");
@@ -100,6 +100,7 @@ var epicCookie = {
 			{
 				name: 'Building Buy Update',
 				oldFunction: 'Game.ObjectsById[0].buy',
+				description: 'Will not buy any buildings at the set purchase amount if you cant afford the entire amount.',
 				hash: -1185965051,
 				override: () => {
 					for (var i in Game.ObjectsById) {
@@ -108,44 +109,40 @@ var epicCookie = {
 				},
 				// can't use arrow function here. for some reason it doesn't work after function substitution
 				newFunction: function(amount) {
-					if (Game.buyMode == -1) {
-						this.sell(Game.buyBulk, 1);
-						return 0;
-					}
-					var success = 0;
-					var moni = 0;
-					var bought = 0;
-					if (!amount) amount = Game.buyBulk;
-					if (amount == -1) amount = 1000;
-					var price = this.getSumPrice(Game.buyBulk);
-					if (Game.cookies >= price) {
-						for (var i = 0; i < amount; i++) {
+					if (Game.buyMode==-1) {this.sell(Game.buyBulk,1);return 0;}
+					var success=0;
+					var moni=0;
+					var bought=0;
+					if (!amount) amount=Game.buyBulk;
+					if (amount==-1) amount=1000;
+					var price=this.getSumPrice(Game.buyBulk);
+					if (Game.cookies>=price) {
+						for (var i=0;i<amount;i++)
+						{
 							bought++;
-							moni += price;
+							moni+=price;
 							Game.Spend(this.getPrice());
 							this.amount++;
 							this.bought++;
 							price = this.getPrice();
 							this.price = price;
 							if (this.buyFunction) this.buyFunction();
-							Game.recalculateGains = 1;
-							if (this.amount == 1 && this.id != 0) l('row' + this.id).classList.add('enabled');
-							this.highest = Math.max(this.highest, this.amount);
+							Game.recalculateGains=1;
+							if (this.amount==1 && this.id!=0) l('row'+this.id).classList.add('enabled');
+							this.highest=Math.max(this.highest,this.amount);
 							Game.BuildingsOwned++;
-							success = 1;
+							success=1;
 						}
 					}
-					if (success) {
-						PlaySound('snd/buy' + choose([1, 2, 3, 4]) + '.mp3', 0.75);
-						this.refresh();
-					}
+					if (success) {PlaySound('snd/buy'+choose([1,2,3,4])+'.mp3',0.75);this.refresh();}
 					//if (moni>0 && amount>1) Game.Notify(this.name,'Bought <b>'+bought+'</b> for '+Beautify(moni)+' cookies','',2);
 				}
 			},
 			{
 				name: 'Draw Function Update',
 				oldFunction: 'Game.Draw',
-				hash: -804573738,
+				description: '',
+				hash: 1010035987,
 				newFunction: () => {
 					Game.DrawBackground();Timer.track('end of background');
 
@@ -168,7 +165,7 @@ var epicCookie = {
 									if (spacePos-dotPos==3) add+='0';
 								}
 							}
-							str=[str.slice(0, spacePos),add,str.slice(spacePos)].join('');
+							str=[str.slice(0,spacePos),add,str.slice(spacePos)].join('');
 						}
 						//if (str.length>11 && !Game.mobile) unit='<br>cookies';
 						//str+=unit;
@@ -177,7 +174,7 @@ var epicCookie = {
 						if (Game.prefs.monospace) str='<span class="monospace">'+str+'</span>';
 						str=str+'<div style="font-size:50%;">CPS : '+Beautify(Game.cookiesPs)+ (Game.cpsSucked>0?' <div style="color:#bfff00">('+Beautify(Game.cookiesPs*(1-Game.cpsSucked),1)+')</div>':'')+'</div>';//display cookie amount
 						l('cookies').innerHTML=str;
-						l('compactCookies').innerHTML=str;
+						// l('compactCookies').innerHTML=str;
 						l('cookies').style.top = 'calc(10% - 5px)';
 						Timer.track('cookie amount');
 
@@ -242,8 +239,8 @@ var epicCookie = {
 							Game.l.style.filter='hue-rotate('+((Game.T*5)%360)+'deg) brightness('+(150-50*pulse)+'%)';
 							Game.l.style.webkitFilter='hue-rotate('+((Game.T*5)%360)+'deg) brightness('+(150-50*pulse)+'%)';
 							Game.l.style.transform='scale('+(1.02-0.02*pulse)+','+(1.02-0.02*pulse)+') rotate('+(Math.sin(Game.T*0.5)*0.5)+'deg)';
-							l('wrapper').style.overflowX='hidden';
-							l('wrapper').style.overflowY='hidden';
+							Game.wrapper.style.overflowX='hidden';
+							Game.wrapper.style.overflowY='hidden';
 						}
 
 						Timer.clean();
@@ -253,9 +250,8 @@ var epicCookie = {
 					}
 
 					Game.NotesDraw();Timer.track('notes');
-					//Game.tooltip.update();//changed to only update when the mouse is moved
 
-					for (var i in Game.customDraw) {Game.customDraw[i]();}
+					Game.runModHook('draw');
 
 					Game.drawT++;
 					//if (Game.prefs.altDraw) requestAnimationFrame(Game.Draw);
@@ -264,7 +260,7 @@ var epicCookie = {
 			{
 				name: 'Update Menu Update',
 				oldFunction: 'Game.UpdateMenu',
-				hash: 1793001438,
+				hash: -1087890758,
 				newFunction: function()
 				{
 					var str='';
@@ -275,58 +271,81 @@ var epicCookie = {
 					}
 					if (Game.onMenu=='prefs')
 					{
-						str+='<div class="section">Options</div>'+
-							'<div class="subsection">'+
-							'<div class="title">General</div>'+
-							'<div class="listing"><a class="option" '+Game.clickStr+'="Game.toSave=true;PlaySound(\'snd/tick.mp3\');">Save</a><label>Save manually (the game autosaves every 60 seconds; shortcut : ctrl+S)</label></div>'+
-							'<div class="listing"><a class="option" '+Game.clickStr+'="Game.ExportSave();PlaySound(\'snd/tick.mp3\');">Export save</a><a class="option" '+Game.clickStr+'="Game.ImportSave();PlaySound(\'snd/tick.mp3\');">Import save</a><label>You can use this to backup your save or to transfer it to another computer (shortcut for import : ctrl+O)</label></div>'+
-							'<div class="listing"><a class="option" '+Game.clickStr+'="Game.FileSave();PlaySound(\'snd/tick.mp3\');">Save to file</a><a class="option" style="position:relative;"><input id="FileLoadInput" type="file" style="cursor:pointer;opacity:0;position:absolute;left:0px;top:0px;width:100%;height:100%;" onchange="Game.FileLoad(event);" '+Game.clickStr+'="PlaySound(\'snd/tick.mp3\');"/>Load from file</a><label>Use this to keep backups on your computer</label></div>'+
+						str+='<div class="section">'+loc("Options")+'</div>';
 
-							'<div class="listing"><a class="option warning" '+Game.clickStr+'="Game.HardReset();PlaySound(\'snd/tick.mp3\');">Wipe save</a><label>Delete all your progress, including your achievements</label></div>'+
-							'<div class="title">Settings</div>'+
-							'<div class="listing">'+
-							Game.WriteSlider('volumeSlider','Volume','[$]%',function(){return Game.volume;},'Game.setVolume(Math.round(l(\'volumeSlider\').value));l(\'volumeSliderRightText\').innerHTML=Game.volume+\'%\';')+'<br>'+
-							Game.WriteButton('fancy','fancyButton','Fancy graphics ON','Fancy graphics OFF','Game.ToggleFancy();')+'<label>(visual improvements; disabling may improve performance)</label><br>'+
-							Game.WriteButton('filters','filtersButton','CSS filters ON','CSS filters OFF','Game.ToggleFilters();')+'<label>(cutting-edge visual improvements; disabling may improve performance)</label><br>'+
-							Game.WriteButton('particles','particlesButton','Particles ON','Particles OFF')+'<label>(cookies falling down, etc; disabling may improve performance)</label><br>'+
-							Game.WriteButton('numbers','numbersButton','Numbers ON','Numbers OFF')+'<label>(numbers that pop up when clicking the cookie)</label><br>'+
-							Game.WriteButton('milk','milkButton','Milk ON','Milk OFF')+'<label>(only appears with enough achievements)</label><br>'+
-							Game.WriteButton('cursors','cursorsButton','Cursors ON','Cursors OFF')+'<label>(visual display of your cursors)</label><br>'+
-							Game.WriteButton('wobbly','wobblyButton','Wobbly cookie ON','Wobbly cookie OFF')+'<label>(your cookie will react when you click it)</label><br>'+
-							Game.WriteButton('cookiesound','cookiesoundButton','Alt cookie sound ON','Alt cookie sound OFF')+'<label>(how your cookie sounds when you click on it)</label><br>'+
-							Game.WriteButton('crates','cratesButton','Icon crates ON','Icon crates OFF')+'<label>(display boxes around upgrades and achievements in stats)</label><br>'+
-							Game.WriteButton('monospace','monospaceButton','Alt font ON','Alt font OFF')+'<label>(your cookies are displayed using a monospace font)</label><br>'+
-							Game.WriteButton('format','formatButton','Short numbers OFF','Short numbers ON','BeautifyAll();Game.RefreshStore();Game.upgradesToRebuild=1;',1)+'<label>(shorten big numbers)</label><br>'+
-							Game.WriteButton('notifs','notifsButton','Fast notes ON','Fast notes OFF')+'<label>(notifications disappear much faster)</label><br>'+
-							//Game.WriteButton('autoupdate','autoupdateButton','Offline mode OFF','Offline mode ON',0,1)+'<label>(disables update notifications)</label><br>'+
-							Game.WriteButton('warn','warnButton','Closing warning ON','Closing warning OFF')+'<label>(the game will ask you to confirm when you close the window)</label><br>'+
-							Game.WriteButton('focus','focusButton','Defocus OFF','Defocus ON',0,1)+'<label>(the game will be less resource-intensive when out of focus)</label><br>'+
-							Game.WriteButton('extraButtons','extraButtonsButton','Extra buttons ON','Extra buttons OFF','Game.ToggleExtraButtons();')+'<label>(add Mute buttons on buildings)</label><br>'+
-							Game.WriteButton('askLumps','askLumpsButton','Lump confirmation ON','Lump confirmation OFF')+'<label>(the game will ask you to confirm before spending sugar lumps)</label><br>'+
-							Game.WriteButton('customGrandmas','customGrandmasButton','Custom grandmas ON','Custom grandmas OFF')+'<label>(some grandmas will be named after Patreon supporters)</label><br>'+
-							Game.WriteButton('timeout','timeoutButton','Sleep mode timeout ON','Sleep mode timeout OFF')+'<label>(on slower computers, the game will put itself in sleep mode when it\'s inactive and starts to lag out; offline CpS production kicks in during sleep mode)</label><br>'+
-							'</div>'+
-							//'<div class="listing">'+Game.WriteButton('autosave','autosaveButton','Autosave ON','Autosave OFF')+'</div>'+
-							'<div class="listing"><a class="option" '+Game.clickStr+'="Game.CheckModData();PlaySound(\'snd/tick.mp3\');">Check mod data</a><label>(view and delete save data created by mods)</label></div>'+
-
-							'<div style="padding-bottom:128px;"></div>'+
-							'</div>'
-						;
-					}
-					else if (Game.onMenu=='main')
-					{
 						str+=
-							'<div class="listing">This isn\'t really finished</div>'+
-							'<div class="listing"><a class="option big title" '+Game.clickStr+'="Game.ShowMenu(\'prefs\');">Menu</a></div>'+
-							'<div class="listing"><a class="option big title" '+Game.clickStr+'="Game.ShowMenu(\'stats\');">Stats</a></div>'+
-							'<div class="listing"><a class="option big title" '+Game.clickStr+'="Game.ShowMenu(\'log\');">Updates</a></div>'+
-							'<div class="listing"><a class="option big title" '+Game.clickStr+'="">Quit</a></div>'+
-							'<div class="listing"><a class="option big title" '+Game.clickStr+'="Game.ShowMenu(Game.onMenu);">Resume</a></div>';
+							'<div class="block" style="padding:0px;margin:8px 4px;">'+
+							'<div class="subsection" style="padding:0px;">'+
+							'<div class="title">'+loc("General")+'</div>'+
+							'<div class="listing" style="text-align:center;"><div style="display:inline-block;padding:2px 8px;opacity:0.75;font-size:12px;vertical-align:middle;" class="smallFancyButton">'+loc("Language: %1",'<b>'+Langs[locId].name+'</b>')+'</div><div class="icon" style="vertical-align:middle;display:inline-block;background-position:'+(-30*48)+'px '+(-29*48)+'px;transform:scale(0.5);margin:-16px -12px;"></div><a style="font-size:15px;text-align:center;width:auto;min-width:130px;" class="option smallFancyButton" id="changeLanguageOption" '+Game.clickStr+'="PlaySound(\'snd/tick.mp3\');Game.showLangSelection();">'+(!EN?'Change language<div class="line"></div>':'')+loc("Change language")+'</a><div style="clear:both;text-align:right;padding-bottom:2px;"></div></div>'+
+							(App?'<div class="listing"><a class="option smallFancyButton" '+Game.clickStr+'="PlaySound(\'snd/tick.mp3\');Game.toSave=true;Game.toQuit=true;">'+loc("Save & Quit")+'</a></div>':'')+
+							'<div class="listing"><a class="option smallFancyButton" '+Game.clickStr+'="Game.toSave=true;PlaySound(\'snd/tick.mp3\');">'+loc("Save")+'</a><label>'+loc("Save manually (the game autosaves every 60 seconds; shortcut: ctrl+S)")+'</label></div>'+
+							'<div class="listing"><a class="option smallFancyButton" '+Game.clickStr+'="Game.ExportSave();PlaySound(\'snd/tick.mp3\');">'+loc("Export save")+'</a><a class="option smallFancyButton" '+Game.clickStr+'="Game.ImportSave();PlaySound(\'snd/tick.mp3\');">'+loc("Import save")+'</a><label>'+loc("You can use this to backup your save or to transfer it to another computer (shortcut for import: ctrl+O)")+'</label></div>'+
+							(!App?('<div class="listing"><a class="option smallFancyButton" '+Game.clickStr+'="Game.FileSave();PlaySound(\'snd/tick.mp3\');">'+loc("Save to file")+'</a><a class="option smallFancyButton" style="position:relative;"><input id="FileLoadInput" type="file" style="cursor:pointer;opacity:0;position:absolute;left:0px;top:0px;width:100%;height:100%;" onchange="Game.FileLoad(event);" '+Game.clickStr+'="PlaySound(\'snd/tick.mp3\');"/>'+loc("Load from file")+'</a><label>'+loc("Use this to keep backups on your computer")+'</label></div>'):'')+
+							'<div class="listing" style="text-align:right;"><label>'+loc("Delete all your progress, including your achievements")+'</label><a class="option smallFancyButton warning" '+Game.clickStr+'="Game.HardReset();PlaySound(\'snd/tick.mp3\');">'+loc("Wipe save")+'</a></div>'+
+
+							'</div>'+
+							'</div>'+
+							'<div class="block" style="padding:0px;margin:8px 4px;">'+
+							'<div class="subsection" style="padding:0px;">'+
+
+							'<div class="title">'+loc("Settings")+'</div>'+
+							((App && App.writeCloudUI)?App.writeCloudUI():'')+
+							'<div class="listing">'+
+							Game.WriteSlider('volumeSlider',loc("Volume"),'[$]%',function(){return Game.volume;},'Game.setVolume(Math.round(l(\'volumeSlider\').value));l(\'volumeSliderRightText\').innerHTML=Game.volume+\'%\';')+
+							(App?Game.WriteSlider('volumeMusicSlider',loc("Volume (music)"),'[$]%',function(){return Game.volumeMusic;},'Game.setVolumeMusic(Math.round(l(\'volumeMusicSlider\').value));l(\'volumeMusicSliderRightText\').innerHTML=Game.volumeMusic+\'%\';'):'')+
+							/*(App?Game.WriteSlider('wubMusicSlider',loc("Wub"),'[$]%',function(){return 100;},'Game.setWubMusic(Math.round(l(\'wubMusicSlider\').value));l(\'wubMusicSliderRightText\').innerHTML=(Math.round(l(\'wubMusicSlider\').value))+\'%\';'):'')+*/
+							'<br>'+
+							(App?Game.WritePrefButton('bgMusic','bgMusicButton',loc("Music in background")+ON,loc("Music in background")+OFF,'')+'<label>('+loc("music will keep playing even when the game window isn't focused")+')</label><br>':'')+
+							(App?Game.WritePrefButton('fullscreen','fullscreenButton',loc("Fullscreen")+ON,loc("Fullscreen")+OFF,'Game.ToggleFullscreen();')+'<br>':'')+
+							Game.WritePrefButton('fancy','fancyButton',loc("Fancy graphics")+ON,loc("Fancy graphics")+OFF,'Game.ToggleFancy();')+'<label>('+loc("visual improvements; disabling may improve performance")+')</label><br>'+
+							Game.WritePrefButton('filters','filtersButton',loc("CSS filters")+ON,loc("CSS filters")+OFF,'Game.ToggleFilters();')+'<label>('+(EN?'cutting-edge visual improvements; disabling may improve performance':loc("visual improvements; disabling may improve performance"))+')</label><br>'+
+							Game.WritePrefButton('particles','particlesButton',loc("Particles")+ON,loc("Particles")+OFF)+(EN?'<label>(cookies falling down, etc; disabling may improve performance)</label>':'')+'<br>'+
+							Game.WritePrefButton('numbers','numbersButton',loc("Numbers")+ON,loc("Numbers")+OFF)+'<label>('+loc("numbers that pop up when clicking the cookie")+')</label><br>'+
+							Game.WritePrefButton('milk','milkButton',loc("Milk [setting]")+ON,loc("Milk [setting]")+OFF)+(EN?'<label>(only appears with enough achievements)</label>':'')+'<br>'+
+							Game.WritePrefButton('cursors','cursorsButton',loc("Cursors [setting]")+ON,loc("Cursors [setting]")+OFF)+'<label>('+loc("visual display of your cursors")+')</label><br>'+
+							Game.WritePrefButton('wobbly','wobblyButton',loc("Wobbly cookie")+ON,loc("Wobbly cookie")+OFF)+(EN?'<label>(your cookie will react when you click it)</label>':'')+'<br>'+
+							Game.WritePrefButton('cookiesound','cookiesoundButton',loc("Alt cookie sound")+ON,loc("Alt cookie sound")+OFF)+(EN?'<label>(how your cookie sounds when you click on it)</label>':'')+'<br>'+
+							Game.WritePrefButton('crates','cratesButton',loc("Icon crates")+ON,loc("Icon crates")+OFF)+'<label>('+loc("display boxes around upgrades and achievements in Stats")+')</label><br>'+
+							Game.WritePrefButton('monospace','monospaceButton',loc("Alt font")+ON,loc("Alt font")+OFF)+'<label>('+loc("your cookies are displayed using a monospace font")+')</label><br>'+
+							Game.WritePrefButton('format','formatButton',loc("Short numbers")+OFF,loc("Short numbers")+ON,'BeautifyAll();Game.RefreshStore();Game.upgradesToRebuild=1;',1)+(EN?'<label>(shorten big numbers)</label>':'')+'<br>'+
+							Game.WritePrefButton('notifs','notifsButton',loc("Fast notes")+ON,loc("Fast notes")+OFF)+'<label>('+loc("notifications disappear much faster")+')</label><br>'+
+							//Game.WritePrefButton('autoupdate','autoupdateButton','Offline mode OFF','Offline mode ON',0,1)+'<label>(disables update notifications)</label><br>'+
+							(!App?Game.WritePrefButton('warn','warnButton',loc("Closing warning")+ON,loc("Closing warning")+OFF)+'<label>('+loc("the game will ask you to confirm when you close the window")+')</label><br>':'')+
+							//Game.WritePrefButton('focus','focusButton',loc("Defocus")+OFF,loc("Defocus")+ON,0,1)+'<label>('+loc("the game will be less resource-intensive when out of focus")+')</label><br>'+
+							Game.WritePrefButton('extraButtons','extraButtonsButton',loc("Extra buttons")+ON,loc("Extra buttons")+OFF,'Game.ToggleExtraButtons();')+'<label>('+loc("add options on buildings like Mute")+')</label><br>'+
+							Game.WritePrefButton('askLumps','askLumpsButton',loc("Lump confirmation")+ON,loc("Lump confirmation")+OFF)+'<label>('+loc("the game will ask you to confirm before spending sugar lumps")+')</label><br>'+
+							(!App?Game.WritePrefButton('customGrandmas','customGrandmasButton',loc("Custom grandmas")+ON,loc("Custom grandmas")+OFF)+'<label>('+loc("some grandmas will be named after Patreon supporters")+')</label><br>':'')+
+							Game.WritePrefButton('notScary','notScaryButton',loc("Scary stuff")+OFF,loc("Scary stuff")+ON,0,1)+'<br>'+
+							Game.WritePrefButton('timeout','timeoutButton',loc("Sleep mode timeout")+ON,loc("Sleep mode timeout")+OFF)+'<label>('+loc("on slower computers, the game will put itself in sleep mode when it's inactive and starts to lag out; offline CpS production kicks in during sleep mode")+')</label><br>'+
+							Game.WritePrefButton('screenreader','screenreaderButton',loc("Screen reader mode")+ON,loc("Screen reader mode")+OFF,'Game.toSave=true;Game.toReload=true;')+'<label>('+loc("allows optimizations for screen readers; game will reload")+')</label><br>'+
+							'</div>'+
+							//'<div class="listing">'+Game.WritePrefButton('autosave','autosaveButton','Autosave ON','Autosave OFF')+'</div>'+
+							(!App?'<div class="listing"><a class="option smallFancyButton" '+Game.clickStr+'="Game.CheckModData();PlaySound(\'snd/tick.mp3\');">'+loc("Check mod data")+'</a><label>('+loc("view and delete save data created by mods")+')</label></div>':'')+
+
+							'</div>'+
+							'</div>'+
+							'</div>';
+
+						if (App && App.writeModUI)
+						{
+							str+=
+								'<div class="block" style="padding:0px;margin:8px 4px;">'+
+								'<div class="subsection" style="padding:0px;">'+
+
+								'<div class="title">'+loc("Mods")+'</div>'+
+								App.writeModUI()+
+								'</div>'+
+								'</div>';
+						}
+
+						str+='<div style="height:128px;"></div>';
 					}
 					else if (Game.onMenu=='log')
 					{
-						str+=replaceAll('[bakeryName]',Game.bakeryName,Game.updateLog);
-						if (!Game.HasAchiev('Olden days')) str+='<div style="text-align:right;width:100%;"><div '+Game.clickStr+'="Game.SparkleAt(Game.mouseX,Game.mouseY);PlaySound(\'snd/tick.mp3\');PlaySound(\'snd/shimmerClick.mp3\');Game.Win(\'Olden days\');Game.UpdateMenu();" class="icon" style="display:inline-block;transform:scale(0.5);cursor:pointer;width:48px;height:48px;background-position:'+(-12*48)+'px '+(-3*48)+'px;"></div></div>';
+						//str+=replaceAll('[bakeryName]',Game.bakeryName,Game.updateLog);
+						str+=Game.updateLog;
+						if (!Game.HasAchiev('Olden days')) str+='<div id="oldenDays" style="text-align:right;width:100%;"><div '+Game.clickStr+'="Game.SparkleAt(Game.mouseX,Game.mouseY);PlaySound(\'snd/tick.mp3\');PlaySound(\'snd/shimmerClick.mp3\');Game.Win(\'Olden days\');Game.UpdateMenu();" class="icon" style="display:inline-block;transform:scale(0.5);cursor:pointer;width:48px;height:48px;background-position:'+(-12*48)+'px '+(-3*48)+'px;"></div></div>';
 					}
 					else if (Game.onMenu=='stats')
 					{
@@ -407,8 +426,8 @@ var epicCookie = {
 
 						var achievementsStr='';
 						var pools={
-							'dungeon':'<b>Dungeon achievements</b> <small>(Not technically achievable yet.)</small>',
-							'shadow':'<b>Shadow achievements</b> <small>(These are feats that are either unfair or difficult to attain. They do not give milk.)</small>'
+							'dungeon':(EN?'<b>Dungeon achievements</b> <small>(Not technically achievable yet.)</small>':'<b>???</b>'),
+							'shadow':'<b>'+loc("Shadow achievements")+'</b> <small>('+loc("These are feats that are either unfair or difficult to attain. They do not give milk.")+')</small>'
 						};
 						for (var i in achievements)
 						{
@@ -426,7 +445,7 @@ var epicCookie = {
 							{
 								var milk=Game.Milks[i];
 								milkStr+='<div '+Game.getTooltip(
-									'<div class="prompt" style="text-align:center;padding-bottom:6px;white-space:nowrap;margin:0px;padding-bottom:96px;"><h3 style="margin:6px 32px 0px 32px;">'+milk.name+'</h3><div style="opacity:0.75;font-size:9px;">('+(i==0?'starter milk':('for '+Beautify(i*25)+' achievements'))+')</div><div class="line"></div><div style="width:100%;height:96px;position:absolute;left:0px;bottom:0px;background:url(img/'+milk.pic+'.png);"></div></div>'
+									'<div class="prompt" style="text-align:center;padding-bottom:6px;white-space:nowrap;margin:0px;padding-bottom:96px;" id="tooltipMilk"><h3 style="margin:6px 32px 0px 32px;">'+(loc("Rank %1",romanize(i+1))+' - '+milk.name)+'</h3><div style="opacity:0.75;font-size:9px;">('+(i==0?loc("starter milk"):loc("for %1 achievements",Beautify(i*25)))+')</div><div class="line"></div><div style="width:100%;height:96px;position:absolute;left:0px;bottom:0px;background:url(img/'+milk.pic+');"></div></div>'
 									,'top')+' style="background:url(img/icons.png?v='+Game.version+') '+(-milk.icon[0]*48)+'px '+(-milk.icon[1]*48)+'px;margin:2px 0px;" class="trophy"></div>';
 							}
 						}
@@ -439,14 +458,14 @@ var epicCookie = {
 							for (var i=0;i<=Game.santaLevel;i++)
 							{
 								santaStr+='<div '+Game.getTooltip(
-									'<div class="prompt" style="text-align:center;padding-bottom:6px;white-space:nowrap;margin:0px 32px;"><div style="width:96px;height:96px;margin:4px auto;background:url(img/santa.png) '+(-i*96)+'px 0px;filter:drop-shadow(0px 3px 2px #000);-webkit-filter:drop-shadow(0px 3px 2px #000);"></div><div class="line"></div><h3>'+Game.santaLevels[i]+'</h3></div>'
+									'<div class="prompt" style="text-align:center;padding-bottom:6px;white-space:nowrap;margin:0px 32px;"><div style="width:96px;height:96px;margin:4px auto;background:url(img/santa.png) '+(-i*96)+'px 0px;filter:drop-shadow(0px 3px 2px #000);-webkit-filter:drop-shadow(0px 3px 2px #000);" id="tooltipSanta"></div><div class="line"></div><h3>'+Game.santaLevels[i]+'</h3></div>'
 									,'top')+' style="background:url(img/santa.png) '+(-i*48)+'px 0px;background-size:'+(frames*48)+'px 48px;" class="trophy"></div>';
 							}
 							santaStr+='<div style="clear:both;"></div>';
 						}
 						var dragonStr='';
 						var frames=9;
-						var mainLevels=[0,4,8,23,24,25];
+						var mainLevels=[0,4,8,Game.dragonLevels.length-3,Game.dragonLevels.length-2,Game.dragonLevels.length-1];
 						if (Game.Has('A crumbly egg'))
 						{
 							for (var i=0;i<=mainLevels.length;i++)
@@ -456,7 +475,7 @@ var epicCookie = {
 									var level=Game.dragonLevels[mainLevels[i]];
 									dragonStr+='<div '+Game.getTooltip(
 										//'<div style="width:96px;height:96px;margin:4px auto;background:url(img/dragon.png?v='+Game.version+') '+(-level.pic*96)+'px 0px;"></div><div class="line"></div><div style="min-width:200px;text-align:center;margin-bottom:6px;">'+level.name+'</div>'
-										'<div class="prompt" style="text-align:center;padding-bottom:6px;white-space:nowrap;margin:0px 32px;"><div style="width:96px;height:96px;margin:4px auto;background:url(img/dragon.png?v='+Game.version+') '+(-level.pic*96)+'px 0px;filter:drop-shadow(0px 3px 2px #000);-webkit-filter:drop-shadow(0px 3px 2px #000);"></div><div class="line"></div><h3>'+level.name+'</h3></div>'
+										'<div class="prompt" style="text-align:center;padding-bottom:6px;white-space:nowrap;margin:0px 32px;" id="tooltipDragon"><div style="width:96px;height:96px;margin:4px auto;background:url(img/dragon.png?v='+Game.version+') '+(-level.pic*96)+'px 0px;filter:drop-shadow(0px 3px 2px #000);-webkit-filter:drop-shadow(0px 3px 2px #000);"></div><div class="line"></div><h3>'+level.name+'</h3></div>'
 										,'top')+' style="background:url(img/dragon.png?v='+Game.version+') '+(-level.pic*48)+'px 0px;background-size:'+(frames*48)+'px 48px;" class="trophy"></div>';
 								}
 							}
@@ -465,18 +484,20 @@ var epicCookie = {
 						var ascensionModeStr='';
 						var icon=Game.ascensionModes[Game.ascensionMode].icon;
 						if (Game.resets>0) ascensionModeStr='<span style="cursor:pointer;" '+Game.getTooltip(
-							'<div style="min-width:200px;text-align:center;font-size:11px;">'+Game.ascensionModes[Game.ascensionMode].desc+'</div>'
-							,'top')+'><div class="icon" style="display:inline-block;float:none;transform:scale(0.5);margin:-24px -16px -19px -8px;'+(icon[2]?'background-image:url('+icon[2]+');':'')+'background-position:'+(-icon[0]*48)+'px '+(-icon[1]*48)+'px;"></div>'+Game.ascensionModes[Game.ascensionMode].name+'</span>';
+							'<div style="min-width:200px;text-align:center;font-size:11px;" id="tooltipChallengeMode">'+Game.ascensionModes[Game.ascensionMode].desc+'</div>'
+							,'top')+'><div class="icon" style="display:inline-block;float:none;transform:scale(0.5);margin:-24px -16px -19px -8px;'+writeIcon(icon)+'"></div>'+Game.ascensionModes[Game.ascensionMode].dname+'</span>';
 
 						var milkName=Game.Milk.name;
 
 						var researchStr=Game.sayTime(Game.researchT,-1);
 						var pledgeStr=Game.sayTime(Game.pledgeT,-1);
 						var wrathStr='';
-						if (Game.elderWrath==1) wrathStr='awoken';
-						else if (Game.elderWrath==2) wrathStr='displeased';
-						else if (Game.elderWrath==3) wrathStr='angered';
-						else if (Game.elderWrath==0 && Game.pledges>0) wrathStr='appeased';
+						if (Game.elderWrath==1) wrathStr=loc("awoken");
+						else if (Game.elderWrath==2) wrathStr=loc("displeased");
+						else if (Game.elderWrath==3) wrathStr=loc("angered");
+						else if (Game.elderWrath==0 && Game.pledges>0) wrathStr=loc("appeased");
+
+						var dropMult=Game.dropRateMult();
 
 						var date=new Date();
 						date.setTime(Date.now()-Game.startDate);
@@ -484,7 +505,7 @@ var epicCookie = {
 						var startDate=Game.sayTime(timeInSeconds*Game.fps,-1);
 						date.setTime(Date.now()-Game.fullDate);
 						var fullDate=Game.sayTime(date.getTime()/1000*Game.fps,-1);
-						if (!Game.fullDate || !fullDate || fullDate.length<1) fullDate='a long while';
+						if (!Game.fullDate || !fullDate || fullDate.length<1) fullDate=loc("a long while");
 						/*date.setTime(new Date().getTime()-Game.lastDate);
                         var lastDate=Game.sayTime(date.getTime()/1000*Game.fps,2);*/
 
@@ -492,78 +513,88 @@ var epicCookie = {
 
 						var seasonStr=Game.sayTime(Game.seasonT,-1);
 
-						str+='<div class="section">Statistics</div>'+
+						str+='<div class="section">'+(EN?"Statistics":loc("Stats"))+'</div>'+
 							'<div class="subsection">'+
-							'<div class="title">General</div>'+
-							'<div class="listing"><b>Cookies in bank :</b> <div class="price plain">'+Game.tinyCookie()+Beautify(Game.cookies)+'</div></div>'+
-							'<div class="listing"><b>Cookies baked (this ascension) :</b> <div class="price plain">'+Game.tinyCookie()+Beautify(Game.cookiesEarned)+'</div></div>'+
-							'<div class="listing"><b>Cookies baked (all time) :</b> <div class="price plain">'+Game.tinyCookie()+Beautify(Game.cookiesEarned+Game.cookiesReset)+'</div></div>'+
-							(Game.cookiesReset>0?'<div class="listing"><b>Cookies forfeited by ascending :</b> <div class="price plain">'+Game.tinyCookie()+Beautify(Game.cookiesReset)+'</div></div>':'')+
-							(Game.resets?('<div class="listing"><b>Legacy started :</b> '+(fullDate==''?'just now':(fullDate+' ago'))+', with '+Beautify(Game.resets)+' ascension'+(Game.resets==1?'':'s')+'</div>'):'')+
-							'<div class="listing"><b>Run started :</b> '+(startDate==''?'just now':(startDate+' ago'))+'</div>'+
-							'<div class="listing"><b>Buildings owned :</b> '+Beautify(buildingsOwned)+'</div>'+
-							'<div class="listing"><b>Cookies per second :</b> '+Beautify(Game.cookiesPs,1)+' <small>'+
-							'(multiplier : '+Beautify(Math.round(Game.globalCpsMult*100),1)+'%)'+
-							(Game.cpsSucked>0?' <span class="warning">(withered : '+Beautify(Math.round(Game.cpsSucked*100),1)+'%)</span>':'')+
+							'<div class="title">'+loc("General")+'</div>'+
+							'<div id="statsGeneral">'+
+							'<div class="listing"><b>'+loc("Cookies in bank:")+'</b> <div class="price plain">'+Game.tinyCookie()+Beautify(Game.cookies)+'</div></div>'+
+							'<div class="listing"><b>'+loc("Cookies baked (this ascension):")+'</b> <div class="price plain">'+Game.tinyCookie()+Beautify(Game.cookiesEarned)+'</div></div>'+
+							'<div class="listing"><b>'+loc("Cookies baked (all time):")+'</b> <div class="price plain">'+Game.tinyCookie()+Beautify(Game.cookiesEarned+Game.cookiesReset)+'</div></div>'+
+							(Game.cookiesReset>0?'<div class="listing"><b>'+loc("Cookies forfeited by ascending:")+'</b> <div class="price plain">'+Game.tinyCookie()+Beautify(Game.cookiesReset)+'</div></div>':'')+
+							(Game.resets?('<div class="listing"><b>'+loc("Legacy started:")+'</b> '+(fullDate==''?loc("just now"):loc("%1 ago",fullDate))+', '+loc("with %1 ascension",LBeautify(Game.resets))+'</div>'):'')+
+							'<div class="listing"><b>'+loc("Run started:")+'</b> '+(startDate==''?loc("just now"):loc("%1 ago",startDate))+'</div>'+
+							'<div class="listing"><b>'+loc("Buildings owned:")+'</b> '+Beautify(buildingsOwned)+'</div>'+
+							'<div class="listing"><b>'+loc("Cookies per second:")+'</b> '+Beautify(Game.cookiesPs,1)+' <small>'+
+							'('+loc("multiplier:")+' '+Beautify(Math.round(Game.globalCpsMult*100),1)+'%)'+
+							(Game.cpsSucked>0?' <span class="warning">('+loc("withered:")+' '+Beautify(Math.round(Game.cpsSucked*100),1)+'%)</span>':'')+
 							'</small></div>'+
-							'<div class="listing"><b>Raw cookies per second :</b> '+Beautify(Game.cookiesPsRaw,1)+' <small>'+
-							'(highest this ascension : '+Beautify(Game.cookiesPsRawHighest,1)+')'+
+							'<div class="listing"><b>'+loc("Raw cookies per second:")+'</b> '+Beautify(Game.cookiesPsRaw,1)+' <small>'+
+							'('+loc("highest this ascension:")+' '+Beautify(Game.cookiesPsRawHighest,1)+')'+
 							'</small></div>'+
-							'<div class="listing"><b>Cookies per click :</b> '+Beautify(Game.computedMouseCps,1)+'</div>'+
-							'<div class="listing"><b>Cookie clicks :</b> '+Beautify(Game.cookieClicks)+'</div>'+
-							'<div class="listing"><b>Hand-made cookies :</b> '+Beautify(Game.handmadeCookies)+'</div>'+
-							'<div class="listing"><b>Golden cookie clicks :</b> '+Beautify(Game.goldenClicksLocal)+' <small>(all time : '+Beautify(Game.goldenClicks)+')</small></div>'+//' <span class="hidden">(<b>Missed golden cookies :</b> '+Beautify(Game.missedGoldenClicks)+')</span></div>'+
-							'<br><div class="listing"><b>Running version :</b> '+Game.version+'</div>'+
+							'<div class="listing"><b>'+loc("Cookies per click:")+'</b> '+Beautify(Game.computedMouseCps,1)+'</div>'+
+							'<div class="listing"><b>'+loc("Cookie clicks:")+'</b> '+Beautify(Game.cookieClicks)+'</div>'+
+							'<div class="listing"><b>'+loc("Hand-made cookies:")+'</b> '+Beautify(Game.handmadeCookies)+'</div>'+
+							'<div class="listing"><b>'+loc("Golden cookie clicks:")+'</b> '+Beautify(Game.goldenClicksLocal)+' <small>('+loc("all time:")+' '+Beautify(Game.goldenClicks)+')</small></div>'+//' <span class="hidden">(<b>Missed golden cookies :</b> '+Beautify(Game.missedGoldenClicks)+')</span></div>'+
+							(dropMult!=1?'<div class="listing"><b>'+loc("Random drop multiplier:")+'</b> <small>x</small>'+Beautify(dropMult,2)+'</div>':'')+
+							'</div>'+
+							'<br><div class="listing"><b>'+loc("Running version:")+'</b> '+Game.version+'</div>'+
 
 							((researchStr!='' || wrathStr!='' || pledgeStr!='' || santaStr!='' || dragonStr!='' || Game.season!='' || ascensionModeStr!='' || Game.canLumps())?(
 								'</div><div class="subsection">'+
-								'<div class="title">Special</div>'+
-								(ascensionModeStr!=''?'<div class="listing"><b>Challenge mode :</b>'+ascensionModeStr+'</div>':'')+
-								(Game.season!=''?'<div class="listing"><b>Seasonal event :</b> '+Game.seasons[Game.season].name+
-									(seasonStr!=''?' <small>('+seasonStr+' remaining)</small>':'')+
+								'<div class="title">'+loc("Special")+'</div>'+
+								'<div id="statsSpecial">'+
+								(ascensionModeStr!=''?'<div class="listing"><b>'+loc("Challenge mode:")+'</b>'+ascensionModeStr+'</div>':'')+
+								(Game.season!=''?'<div class="listing"><b>'+loc("Seasonal event:")+'</b> '+Game.seasons[Game.season].name+
+									(seasonStr!=''?' <small>('+loc("%1 remaining",seasonStr)+')</small>':'')+
 									'</div>':'')+
-								(Game.season=='fools'?
+								(EN && Game.season=='fools'?
 									'<div class="listing"><b>Money made from selling cookies :</b> '+Beautify(Game.cookiesEarned*0.08,2)+' cookie dollars</div>'+
 									(Game.Objects['Portal'].highest>0?'<div class="listing"><b>TV show seasons produced :</b> '+Beautify(Math.floor((timeInSeconds/60/60)*(Game.Objects['Portal'].highest*0.13)+1))+'</div>':'')
 									:'')+
-								(researchStr!=''?'<div class="listing"><b>Research :</b> '+researchStr+' remaining</div>':'')+
-								(wrathStr!=''?'<div class="listing"><b>Grandmatriarchs status :</b> '+wrathStr+'</div>':'')+
-								(pledgeStr!=''?'<div class="listing"><b>Pledge :</b> '+pledgeStr+' remaining</div>':'')+
-								(Game.wrinklersPopped>0?'<div class="listing"><b>Wrinklers popped :</b> '+Beautify(Game.wrinklersPopped)+'</div>':'')+
-								((Game.canLumps() && Game.lumpsTotal>-1)?'<div class="listing"><b>Sugar lumps harvested :</b> <div class="price lump plain">'+Beautify(Game.lumpsTotal)+'</div></div>':'')+
+								(researchStr!=''?'<div class="listing"><b>'+loc("Research:")+'</b> '+loc("%1 remaining",researchStr)+'</div>':'')+
+								(wrathStr!=''?'<div class="listing"><b>'+loc("Grandmatriarchs status:")+'</b> '+wrathStr+'</div>':'')+
+								(pledgeStr!=''?'<div class="listing"><b>'+loc("Pledge:")+'</b> '+loc("%1 remaining",pledgeStr)+'</div>':'')+
+								(Game.wrinklersPopped>0?'<div class="listing"><b>'+loc("Wrinklers popped:")+'</b> '+Beautify(Game.wrinklersPopped)+'</div>':'')+
+								((Game.canLumps() && Game.lumpsTotal>-1)?'<div class="listing"><b>'+loc("Sugar lumps harvested:")+'</b> <div class="price lump plain">'+Beautify(Game.lumpsTotal)+'</div></div>':'')+
 								//(Game.cookiesSucked>0?'<div class="listing warning"><b>Withered :</b> '+Beautify(Game.cookiesSucked)+' cookies</div>':'')+
-								(Game.reindeerClicked>0?'<div class="listing"><b>Reindeer found :</b> '+Beautify(Game.reindeerClicked)+'</div>':'')+
-								(santaStr!=''?'<div class="listing"><b>Santa stages unlocked :</b></div><div>'+santaStr+'</div>':'')+
-								(dragonStr!=''?'<div class="listing"><b>Dragon training :</b></div><div>'+dragonStr+'</div>':'')+
-								''
+								(Game.reindeerClicked>0?'<div class="listing"><b>'+loc("Reindeer found:")+'</b> '+Beautify(Game.reindeerClicked)+'</div>':'')+
+								(santaStr!=''?'<div class="listing"><b>'+loc("Santa stages unlocked:")+'</b></div><div>'+santaStr+'</div>':'')+
+								(dragonStr!=''?'<div class="listing"><b>'+loc("Dragon training:")+'</b></div><div>'+dragonStr+'</div>':'')+
+								'</div>'
 							):'')+
 							((Game.prestige>0 || prestigeUpgrades!='')?(
 								'</div><div class="subsection">'+
-								'<div class="title">Prestige</div>'+
+								'<div class="title">'+loc("Prestige")+'</div>'+
+								'<div id="statsPrestige">'+
 								'<div class="listing"><div class="icon" style="float:left;background-position:'+(-19*48)+'px '+(-7*48)+'px;"></div>'+
-								'<div style="margin-top:8px;"><span class="title" style="font-size:22px;">Prestige level : '+Beautify(Game.prestige)+'</span> at '+Beautify(heavenlyMult*100,1)+'% of its potential <b>(+'+Beautify(parseFloat(Game.prestige)*Game.heavenlyPower*heavenlyMult,1)+'% CpS)</b><br>Heavenly chips : <b>'+Beautify(Game.heavenlyChips)+'</b></div>'+
+								'<div style="margin-top:8px;"><span class="title" style="font-size:22px;">'+loc("Prestige level:")+' '+Beautify(Game.prestige)+'</span> '+loc("at %1% of its potential <b>(+%2% CpS)</b>",[Beautify(heavenlyMult*100,1),Beautify(parseFloat(Game.prestige)*Game.heavenlyPower*heavenlyMult,1)])+'<br>'+loc("Heavenly chips:")+' <b>'+Beautify(Game.heavenlyChips)+'</b></div>'+
 								'</div>'+
 								(prestigeUpgrades!=''?(
-									'<div class="listing" style="clear:left;"><b>Prestige upgrades unlocked :</b> '+prestigeUpgradesOwned+'/'+prestigeUpgradesTotal+' ('+Math.floor((prestigeUpgradesOwned/prestigeUpgradesTotal)*100)+'%)</div>'+
+									'<div class="listing" style="clear:left;"><b>'+loc("Prestige upgrades unlocked:")+'</b> '+prestigeUpgradesOwned+'/'+prestigeUpgradesTotal+' ('+Math.floor((prestigeUpgradesOwned/prestigeUpgradesTotal)*100)+'%)</div>'+
 									'<div class="listing crateBox">'+prestigeUpgrades+'</div>'):'')+
-								''):'')+
+								'</div>'
+							):'')+
 
 							'</div><div class="subsection">'+
-							'<div class="title">Upgrades</div>'+
+							'<div class="title">'+loc("Upgrades")+'</div>'+
+							'<div id="statsUpgrades">'+
 							(hiddenUpgrades!=''?('<div class="listing"><b>Debug</b></div>'+
 								'<div class="listing crateBox">'+hiddenUpgrades+'</div>'):'')+
-							'<div class="listing"><b>Upgrades unlocked :</b> '+upgradesOwned+'/'+upgradesTotal+' ('+Math.floor((upgradesOwned/upgradesTotal)*100)+'%)</div>'+
+							'<div class="listing"><b>'+loc("Upgrades unlocked:")+'</b> '+upgradesOwned+'/'+upgradesTotal+' ('+Math.floor((upgradesOwned/upgradesTotal)*100)+'%)</div>'+
 							'<div class="listing crateBox">'+upgrades+'</div>'+
-							(cookieUpgrades!=''?('<div class="listing"><b>Cookies</b></div>'+
+							(cookieUpgrades!=''?('<div class="listing"><b>'+loc("Cookies")+'</b></div>'+
 								'<div class="listing crateBox">'+cookieUpgrades+'</div>'):'')+
+							'</div>'+
 							'</div><div class="subsection">'+
-							'<div class="title">Achievements</div>'+
-							'<div class="listing"><b>Achievements unlocked :</b> '+achievementsOwned+'/'+achievementsTotal+' ('+Math.floor((achievementsOwned/achievementsTotal)*100)+'%)'+(achievementsOwnedOther>0?('<span style="font-weight:bold;font-size:10px;color:#70a;"> (+'+achievementsOwnedOther+')</span>'):'')+'</div>'+
-							(Game.cookiesMultByType['kittens']>1?('<div class="listing"><b>Kitten multiplier :</b> '+Beautify((Game.cookiesMultByType['kittens'])*100)+'%</div>'):'')+
-							'<div class="listing"><b>Milk :</b> '+milkName+'</div>'+
-							(milkStr!=''?'<div class="listing"><b>Milk flavors unlocked :</b></div><div>'+milkStr+'</div>':'')+
-							'<div class="listing"><small style="opacity:0.75;">(Milk is gained with each achievement. It can unlock unique upgrades over time.)</small></div>'+
+							'<div class="title">'+loc("Achievements")+'</div>'+
+							'<div id="statsAchievs">'+
+							'<div class="listing"><b>'+loc("Achievements unlocked:")+'</b> '+achievementsOwned+'/'+achievementsTotal+' ('+Math.floor((achievementsOwned/achievementsTotal)*100)+'%)'+(achievementsOwnedOther>0?('<span style="font-weight:bold;font-size:10px;color:#70a;"> (+'+achievementsOwnedOther+')</span>'):'')+'</div>'+
+							(Game.cookiesMultByType['kittens']>1?('<div class="listing"><b>'+loc("Kitten multiplier:")+'</b> '+Beautify((Game.cookiesMultByType['kittens'])*100)+'%</div>'):'')+
+							'<div class="listing"><b>'+loc("Milk")+':</b> '+milkName+'</div>'+
+							(milkStr!=''?'<div class="listing"><b>'+loc("Milk flavors unlocked:")+'</b></div><div>'+milkStr+'</div>':'')+
+							'<div class="listing"><small style="opacity:0.75;">('+loc("Milk is gained with each achievement. It can unlock unique upgrades over time.")+')</small></div>'+
 							achievementsStr+
+							'</div>'+
 							'</div>'+
 							'<div style="padding-bottom:128px;"></div>'
 						;
@@ -573,6 +604,22 @@ var epicCookie = {
 					}
 					//str='<div id="selectionKeeper" class="selectable">'+str+'</div>';
 					l('menu').innerHTML=str;
+					if (App)
+					{
+						var anchors=l('menu').getElementsByTagName('a');
+						for (var i=0;i<anchors.length;i++)
+						{
+							var it=anchors[i];
+							if (it.href)
+							{
+								console.log(it.href);
+								AddEvent(it,'click',function(href){return function(){
+									App.openLink(href);
+								}}(it.href));
+								it.removeAttribute('href');
+							}
+						}
+					}
 					/*AddEvent(l('selectionKeeper'),'mouseup',function(e){
                         console.log('selection:',window.getSelection());
                     });*/
@@ -581,7 +628,7 @@ var epicCookie = {
 			{
 				name: 'Show Menu Update',
 				oldFunction: 'Game.ShowMenu',
-				hash: 1816169584,
+				hash: -727173475,
 				newFunction: what => {
 					if (!what || what=='') what=Game.onMenu;
 					if (Game.onMenu=='' && what!='') Game.addClass('onMenu');
@@ -590,10 +637,10 @@ var epicCookie = {
 					//if (what=='log') l('donateBox').className='on'; else l('donateBox').className='';
 					Game.onMenu=what;
 
-					l('prefsButton').className=(Game.onMenu=='prefs')?'button selected':'button';
-					l('statsButton').className=(Game.onMenu=='stats')?'button selected':'button';
-					l('logButton').className=(Game.onMenu=='log')?'button selected':'button';
-					l('epicButton').className=(Game.onMenu=='epic')?'button selected':'button';
+					l('prefsButton').className=(Game.onMenu=='prefs')?'panelButton selected':'panelButton';
+					l('statsButton').className=(Game.onMenu=='stats')?'panelButton selected':'panelButton';
+					l('logButton').className=(Game.onMenu=='log')?'panelButton selected':'panelButton';
+					l('epicButton').className=(Game.onMenu=='epic')?'panelButton selected':'panelButton';
 
 					if (Game.onMenu=='') PlaySound('snd/clickOff.mp3');
 					else PlaySound('snd/clickOn.mp3');
@@ -613,14 +660,18 @@ var epicCookie = {
 			{
 				name: 'Sugar Frenzy Protection',
 				oldFunction: 'Game.Ascend',
-				hash: 900140325,
+				description: 'Wont let you ascend if you havent used the Sugar Frenzy yet',
+				hash: -2114144281,
 				newFunction: bypass =>
 				{
+					// beginning of EPIC changes
 					if (!epicCookie.sugarFrenzy.canAscend()) {
 						Game.Notify('Sugar Frenzy Block','You have not used Sugar Frenzy yet this ascension! (You can turn off Sugar Frenzy Protect in the Epic Settings menu.)',[22,17],4);
 						return;
 					}
-					if (!bypass) Game.Prompt('<h3>Ascend</h3><div class="block">Do you REALLY want to ascend?<div class="line"></div>You will lose your progress and start over from scratch.<div class="line"></div>All your cookies will be converted into prestige and heavenly chips.<div class="line"></div>You will keep your achievements'+(Game.canLumps()?', building levels and sugar lumps':'')+'.</div>',[['Yes!','Game.ClosePrompt();Game.Ascend(1);'],'No']);
+					// end of EPIC changes
+
+					if (!bypass) Game.Prompt('<id Ascend><h3>'+loc("Ascend")+'</h3><div class="block">'+tinyIcon([19,7])+'<div class="line"></div>'+loc("Do you REALLY want to ascend?<div class=\"line\"></div>You will lose your progress and start over from scratch.<div class=\"line\"></div>All your cookies will be converted into prestige and heavenly chips.")+'<div class="line"></div>'+(Game.canLumps()?loc("You will keep your achievements, building levels and sugar lumps."):loc("You will keep your achievements."))+'<div class="optionBox"><a class="option smallFancyButton" style="margin:16px;padding:8px 16px;animation:rainbowCycle 5s infinite ease-in-out,pucker 0.2s ease-out;box-shadow:0px 0px 0px 1px #000,0px 0px 1px 2px currentcolor;background:linear-gradient(to bottom,transparent 0%,currentColor 500%);width:auto;text-align:center;" '+Game.clickStr+'="PlaySound(\'snd/tick.mp3\');Game.ClosePrompt();Game.Ascend(1);" id="promptOption0">'+loc("Ascend")+'</a></div></div>',[[loc("Yes"),'Game.ClosePrompt();Game.Ascend(1);','float:left;display:none;'],[loc("Cancel"),0,'float:right']]);
 					else
 					{
 						if (Game.prefs.popups) Game.Popup('Ascending');
@@ -640,14 +691,18 @@ var epicCookie = {
 						Game.AscendOffYT=0;
 						Game.AscendZoomT=1;
 						Game.AscendZoom=0.2;
+
+						Game.jukebox.reset();
+						PlayCue('preascend');
 					}
 				}
 			},
 			{
 				name: 'Wrinkler Complaints',
 				oldFunction: 'Game.UpdateWrinklers',
-				hash: -1997174827,
+				hash: 1084507551,
 				newFunction: () => {
+					// beginning of EPIC changes 1/2
 					const wrinklerComplaints = ['What do you want!?','Ouch!','Oh, the humanity!','That tickled!','Oof','Stop that!','NoooOOOOoooo!','oh well','ugh!'];
 					var inRect = (x, y, rect) => {
 						//find out if the point x,y is in the rotated rectangle rect{w,h,r,o} (width,height,rotation in radians,y-origin) (needs to be normalized)
@@ -661,6 +716,8 @@ var epicCookie = {
 						if (x2 > -0.5 * rect.w && x2 < 0.5 * rect.w && y2 > -0.5 * rect.h && y2 < 0.5 * rect.h) return true;
 						return false;
 					}
+					// end of EPIC changes 1/2
+
 					var xBase=0;
 					var yBase=0;
 					var onWrinkler=0;
@@ -745,7 +802,7 @@ var epicCookie = {
 										Game.playWrinklerSquishSound();
 										me.hurt=1;
 										me.hp-=0.75;
-										if (Game.prefs.particles && !(me.hp<=0.5 && me.phase>0))
+										if (Game.prefs.particles && !Game.prefs.notScary && !Game.WINKLERS && !(me.hp<=0.5 && me.phase>0))
 										{
 											var x=me.x+(Math.sin(me.r*Math.PI/180)*90);
 											var y=me.y+(Math.cos(me.r*Math.PI/180)*90);
@@ -756,7 +813,10 @@ var epicCookie = {
 												part.r=-me.r;
 											}
 										}
-										if (me.hp > 0.5) Game.Notify(choose(wrinklerComplaints),'<b>HP: '+me.hp+'</b>',[19,8],6);
+
+										// beginning of EPIC changes 2/2
+										if (me.hp > 0.5) Game.Notify(choose(wrinklerComplaints),'<b>HP: '+Beautify(me.hp, 2)+'</b>',[19,8],6);
+										// end of EPIC changes 2/2
 									}
 									Game.Click=0;
 								}
@@ -869,7 +929,7 @@ var epicCookie = {
 			{
 				name: 'Easter Egg Notifications',
 				oldFunction: 'Game.DropEgg',
-				hash: -1994923900,
+				hash: -334693417,
 				newFunction: failRate => {
 					failRate*=1/Game.dropRateMult();
 					if (Game.season!='easter') return;
@@ -883,29 +943,38 @@ var epicCookie = {
 						else if (godLvl==2) failRate*=0.95;
 						else if (godLvl==3) failRate*=0.97;
 					}
+					// beginning of EPIC changes 1/4
 					var random = Math.random();
 					if (random>=failRate)
 					{
+						// end of EPIC changes 1/4
 						var drop='';
 						if (Math.random()<0.1) drop=choose(Game.rareEggDrops);
 						else drop=choose(Game.eggDrops);
 						if (Game.Has(drop) || Game.HasUnlocked(drop))//reroll if we have it
 						{
+							// beginning of EPIC changes 2/4
 							Game.Notify('Almost Got One!','You already have a <b>'+drop+'</b>',Game.Upgrades[drop].icon, 6)
+							// end of EPIC changes 2/4
 							if (Math.random()<0.1) drop=choose(Game.rareEggDrops);
 							else drop=choose(Game.eggDrops);
 
 						}
+						// beginning of EPIC changes 3/4
 						if (Game.Has(drop) || Game.HasUnlocked(drop)) {
 							Game.Notify('Almost Got One!','You already have a <b>'+drop+'</b>',Game.Upgrades[drop].icon, 6)
 							return;
-						};
+						}
+						// end of EPIC changes 3/4
 						Game.Unlock(drop);
 						if (Game.prefs.popups) Game.Popup('You find :<br>'+drop+'!');
 						else Game.Notify('You found an egg!','<b>'+drop+'</b>',Game.Upgrades[drop].icon, 6);
-					} else {
+					}
+					// beginning of EPIC changes 4/4
+					else {
 						Game.Notify('No Egg Drop For You!',Beautify(random*100)+'/'+Beautify(failRate*100),[0,12], 6);
 					}
+					// end of EPIC changes 4/4
 				}
 			},
 		]
@@ -993,7 +1062,7 @@ var epicCookie = {
 		addStyle: function(selector, rules) {
 			const rule = this.findRule(selector);
 			if (rule !== false) {
-				console.error('unable to edit existing rules yet');
+				console.error('unable to edit existing rules for ' + selector);
 			} else {
 				document.styleSheets[this.sheetIndex].insertRule(selector + '{' + rules + '}');
 			}
