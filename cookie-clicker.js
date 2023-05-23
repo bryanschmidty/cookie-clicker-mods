@@ -35,3 +35,6 @@ let shinyInterval = setInterval(() => {
 	})
 }, 100);
 clearInterval(shinyInterval);
+
+// Hours since run started
+(Date.now()-Game.startDate)*Game.fps/108000000
