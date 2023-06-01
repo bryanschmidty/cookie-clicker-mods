@@ -3,10 +3,10 @@ var epicCookie = {
 	cookieClickerVersion: 2.048,
 	supportedVersions: [2.048, 2.049, 2.052],
 	loopInterval: 1000,
-	init: function() {
+	init: function () {
 		if (typeof Game !== "object") return console.log("The Cookie Clicker 'Game' object is not available");
 		if (!this.supportedVersions.includes(Game.version)) {
-			Game.Notify('EpicCookie Mod not loaded', `Supports Cookie Clicker versions: ${this.supportedVersions.join(', ')}`,[14,4],4)
+			Game.Notify('EpicCookie Mod not loaded', `Supports Cookie Clicker versions: ${this.supportedVersions.join(', ')}`, [14, 4], 4)
 			return console.log(`EpicCookie only supports Cookie Clicker versions: ${this.supportedVersions.join(', ')}`)
 		}
 
@@ -20,7 +20,7 @@ var epicCookie = {
 
 		this.loop();
 	},
-	loop: function() {
+	loop: function () {
 		for (var obj in epicCookie) {
 			if (epicCookie[obj].loop && epicCookie[obj].enabled) {
 				epicCookie[obj].loop();
@@ -31,55 +31,55 @@ var epicCookie = {
 	},
 	settings: {
 		data: {},
-		getMenu: function() {
+		getMenu: function () {
 			return '<div class="section">EpicCookie Settings</div>' +
-				'<div class="subsection">'+
-					'<div class="title">'+loc("About")+'</div>'+
-					'<div class="listing">EpicCookie is a mod intended to assist you in your Cookie journey without cheating. If there are any features that you feel are too "cheaty", please let me know. Some may argue that any mod could be considered cheating, but I believe in some simple automation.</div>'+
-				'</div>'+
-				'<div class="subsection">'+
-					'<div class="title">Main Features</div>' +
-					'<div class="listing">'+
-						Game.WritePrefButton('epicUpgrades', 'epicUpgrades', 'Auto Upgrades ON', 'Auto Upgrades OFF', 'epicCookie.autoBuyUpgrades.toggle();') +
-						'<label>Will automatically buy upgrades when you can afford them</label><br />' +
-						Game.WritePrefButton('epicBuildings', 'epicBuildings', 'Auto Buildings ON', 'Auto Buildings OFF', 'epicCookie.autoBuyBuildings.toggle();') +
-						'<label>Will automatically buy buildings when you can afford them, in increments of 100</label><br />' +
-						Game.WritePrefButton('epicDragon', 'epicDragon', 'Auto Dragon ON', 'Auto Dragon OFF', 'epicCookie.autoBuyDragonLevels.toggle();') +
-						'<label>Will automatically buy dragon levels when you can afford them</label><br />' +
-						Game.WritePrefButton('epicSanta', 'epicSanta', 'Auto Santa ON', 'Auto Santa OFF', 'epicCookie.autoBuySantaLevels.toggle();') +
-						'<label>Will automatically buy santa levels when you can afford them</label><br />' +
-						Game.WritePrefButton('epicWrinklerComplaints', 'epicWrinklerComplaints', 'Wrinkler Complaints ON', 'Wrinkler Complaints OFF', 'epicCookie.wrinklerComplaints .toggle();') +
-						'<label>Will automatically buy santa levels when you can afford them</label><br />' +
-
-						// Game.WritePrefButton('epicWrinklerPopper', 'epicWrinklerPopper', 'Wrinkler Popper ON', 'Wrinkler Popper OFF', 'epicCookie.wrinklerPopper.toggle();') +
-						// '<label>[Doesn\'t work yet] Gives you a button to pop all wrinklers.</label><br />' +
-						Game.WritePrefButton('epicCookieShield', 'epicCookieShield', 'Cookie Shield ON', 'Cookie Shield OFF', 'epicCookie.cookieShield.toggle();') +
-						'<label>Places a shield over the big cookie when you have Shimmering Veil. Prevents accidental clicks.</label><br />' +
-						Game.WritePrefButton('epicAutoWizardry', 'epicAutoWizardry', 'Auto Wizardry ON', 'Auto Wizardry OFF', 'epicCookie.wizardry.toggle();') +
-						'<label>Automatically casts a spell of your choice when your magic meter is full.</label><br />' +
-						Game.WritePrefButton('epicSugarFrenzy', 'epicSugarFrenzy', 'Sugar Frenzy Protect ON', 'Sugar Frenzy Protect OFF', 'epicCookie.sugarFrenzy.toggle();') +
-						'<label>Won\'t let you ascend if you haven\'t run Sugar Frenzy yet.</label><br />' +
-					'</div>'+
-				'</div>'+
-
-				'<div class="subsection">'+
-					'<div class="title">Misc</div>'+
+				'<div class="subsection">' +
+				'<div class="title">' + loc("About") + '</div>' +
+				'<div class="listing">EpicCookie is a mod intended to assist you in your Cookie journey without cheating. If there are any features that you feel are too "cheaty", please let me know. Some may argue that any mod could be considered cheating, but I believe in some simple automation.</div>' +
 				'</div>' +
-				'<div class="subsection update">'+
-					'<div class="title">To-do List</div>'+
-					'<div class="listing">&bull; Wrinkler Popper: finish. add option to save shiny wrinklers</div>'+
-					'<div class="listing">&bull; Auto Wizardry: Allow for selection of spell that is cast</div>'+
-					'<div class="listing">&bull; Auto Upgrades: auto select "Yes" on One Mind updrade</div>'+
-					'<div class="listing">&bull; Auto Buildings: Set chunk size (currently defaults to 100)</div>'+
-					'<div class="listing">&bull; Auto Dragon: automatically equip user-selected Dragon Auras</div>'+
-					'<div class="listing">&bull; Auto Pantheon: automatically equip user-selected spirits</div>'+
-					'<div class="listing">&bull; Add Auto-Season feature</div>'+
-					'<div class="listing">&bull; Integrate <a href="https://github.com/Acharvak/Cookie-Clicker-Agronomicon">Agronomicon mod</a></div>'+
-					'<div class="listing">&bull; Auto-backup save in cloud</div>'+
-					'<div class="listing">&bull; Run Idle in cloud (small service fee for servers - $1/month?)</div>'+
+				'<div class="subsection">' +
+				'<div class="title">Main Features</div>' +
+				'<div class="listing">' +
+				Game.WritePrefButton('epicUpgrades', 'epicUpgrades', 'Auto Upgrades ON', 'Auto Upgrades OFF', 'epicCookie.autoBuyUpgrades.toggle();') +
+				'<label>Will automatically buy upgrades when you can afford them</label><br />' +
+				Game.WritePrefButton('epicBuildings', 'epicBuildings', 'Auto Buildings ON', 'Auto Buildings OFF', 'epicCookie.autoBuyBuildings.toggle();') +
+				'<label>Will automatically buy buildings when you can afford them, in increments of 100</label><br />' +
+				Game.WritePrefButton('epicDragon', 'epicDragon', 'Auto Dragon ON', 'Auto Dragon OFF', 'epicCookie.autoBuyDragonLevels.toggle();') +
+				'<label>Will automatically buy dragon levels when you can afford them</label><br />' +
+				Game.WritePrefButton('epicSanta', 'epicSanta', 'Auto Santa ON', 'Auto Santa OFF', 'epicCookie.autoBuySantaLevels.toggle();') +
+				'<label>Will automatically buy santa levels when you can afford them</label><br />' +
+				Game.WritePrefButton('epicWrinklerComplaints', 'epicWrinklerComplaints', 'Wrinkler Complaints ON', 'Wrinkler Complaints OFF', 'epicCookie.wrinklerComplaints .toggle();') +
+				'<label>Will automatically buy santa levels when you can afford them</label><br />' +
+
+				// Game.WritePrefButton('epicWrinklerPopper', 'epicWrinklerPopper', 'Wrinkler Popper ON', 'Wrinkler Popper OFF', 'epicCookie.wrinklerPopper.toggle();') +
+				// '<label>[Doesn\'t work yet] Gives you a button to pop all wrinklers.</label><br />' +
+				Game.WritePrefButton('epicCookieShield', 'epicCookieShield', 'Cookie Shield ON', 'Cookie Shield OFF', 'epicCookie.cookieShield.toggle();') +
+				'<label>Places a shield over the big cookie when you have Shimmering Veil. Prevents accidental clicks.</label><br />' +
+				Game.WritePrefButton('epicAutoWizardry', 'epicAutoWizardry', 'Auto Wizardry ON', 'Auto Wizardry OFF', 'epicCookie.wizardry.toggle();') +
+				'<label>Automatically casts a spell of your choice when your magic meter is full.</label><br />' +
+				Game.WritePrefButton('epicSugarFrenzy', 'epicSugarFrenzy', 'Sugar Frenzy Protect ON', 'Sugar Frenzy Protect OFF', 'epicCookie.sugarFrenzy.toggle();') +
+				'<label>Won\'t let you ascend if you haven\'t run Sugar Frenzy yet.</label><br />' +
+				'</div>' +
+				'</div>' +
+
+				'<div class="subsection">' +
+				'<div class="title">Misc</div>' +
+				'</div>' +
+				'<div class="subsection update">' +
+				'<div class="title">To-do List</div>' +
+				'<div class="listing">&bull; Wrinkler Popper: finish. add option to save shiny wrinklers</div>' +
+				'<div class="listing">&bull; Auto Wizardry: Allow for selection of spell that is cast</div>' +
+				'<div class="listing">&bull; Auto Upgrades: auto select "Yes" on One Mind updrade</div>' +
+				'<div class="listing">&bull; Auto Buildings: Set chunk size (currently defaults to 100)</div>' +
+				'<div class="listing">&bull; Auto Dragon: automatically equip user-selected Dragon Auras</div>' +
+				'<div class="listing">&bull; Auto Pantheon: automatically equip user-selected spirits</div>' +
+				'<div class="listing">&bull; Add Auto-Season feature</div>' +
+				'<div class="listing">&bull; Integrate <a href="https://github.com/Acharvak/Cookie-Clicker-Agronomicon">Agronomicon mod</a></div>' +
+				'<div class="listing">&bull; Auto-backup save in cloud</div>' +
+				'<div class="listing">&bull; Run Idle in cloud (small service fee for servers - $1/month?)</div>' +
 				'</div>';
 		},
-		get: function(name) {
+		get: function (name) {
 
 		}
 	},
@@ -110,7 +110,7 @@ var epicCookie = {
 			if (str.length == 0) return hash;
 			for (i = 0; i < str.length; i++) {
 				char = str.charCodeAt(i);
-				hash = ((hash<<5)-hash)+char;
+				hash = ((hash << 5) - hash) + char;
 				hash = hash & hash; // Convert to 32bit integer
 			}
 			return hash;
@@ -137,33 +137,38 @@ var epicCookie = {
 					}
 				},
 				// can't use arrow function here. for some reason it doesn't work after function substitution
-				newFunction: function(amount) {
-					if (Game.buyMode==-1) {this.sell(Game.buyBulk,1);return 0;}
-					var success=0;
-					var moni=0;
-					var bought=0;
-					if (!amount) amount=Game.buyBulk;
-					if (amount==-1) amount=1000;
-					var price=this.getSumPrice(Game.buyBulk);
-					if (Game.cookies>=price) {
-						for (var i=0;i<amount;i++)
-						{
+				newFunction: function (amount) {
+					if (Game.buyMode == -1) {
+						this.sell(Game.buyBulk, 1);
+						return 0;
+					}
+					var success = 0;
+					var moni = 0;
+					var bought = 0;
+					if (!amount) amount = Game.buyBulk;
+					if (amount == -1) amount = 1000;
+					var price = this.getSumPrice(Game.buyBulk);
+					if (Game.cookies >= price) {
+						for (var i = 0; i < amount; i++) {
 							bought++;
-							moni+=price;
+							moni += price;
 							Game.Spend(this.getPrice());
 							this.amount++;
 							this.bought++;
 							price = this.getPrice();
 							this.price = price;
 							if (this.buyFunction) this.buyFunction();
-							Game.recalculateGains=1;
-							if (this.amount==1 && this.id!=0) l('row'+this.id).classList.add('enabled');
-							this.highest=Math.max(this.highest,this.amount);
+							Game.recalculateGains = 1;
+							if (this.amount == 1 && this.id != 0) l('row' + this.id).classList.add('enabled');
+							this.highest = Math.max(this.highest, this.amount);
 							Game.BuildingsOwned++;
-							success=1;
+							success = 1;
 						}
 					}
-					if (success) {PlaySound('snd/buy'+choose([1,2,3,4])+'.mp3',0.75);this.refresh();}
+					if (success) {
+						PlaySound('snd/buy' + choose([1, 2, 3, 4]) + '.mp3', 0.75);
+						this.refresh();
+					}
 					//if (moni>0 && amount>1) Game.Notify(this.name,'Bought <b>'+bought+'</b> for '+Beautify(moni)+' cookies','',2);
 				}
 			},
@@ -173,91 +178,93 @@ var epicCookie = {
 				description: '',
 				hash: -1766699360,
 				newFunction: () => {
-					Game.DrawBackground();Timer.track('end of background');
+					Game.DrawBackground();
+					Timer.track('end of background');
 
-					if (!Game.OnAscend)
-					{
+					if (!Game.OnAscend) {
 
-						var unit=(Math.round(Game.cookiesd)==1?' cookie':' cookies');
-						var str=Beautify(Math.round(Game.cookiesd));
-						if (Game.cookiesd>=1000000)//dirty padding
+						var unit = (Math.round(Game.cookiesd) == 1 ? ' cookie' : ' cookies');
+						var str = Beautify(Math.round(Game.cookiesd));
+						if (Game.cookiesd >= 1000000)//dirty padding
 						{
-							var spacePos=str.indexOf(' ');
-							var dotPos=str.indexOf('.');
-							var add='';
-							if (spacePos!=-1)
-							{
-								if (dotPos==-1) add+='.000';
-								else
-								{
-									if (spacePos-dotPos==2) add+='00';
-									if (spacePos-dotPos==3) add+='0';
+							var spacePos = str.indexOf(' ');
+							var dotPos = str.indexOf('.');
+							var add = '';
+							if (spacePos != -1) {
+								if (dotPos == -1) add += '.000';
+								else {
+									if (spacePos - dotPos == 2) add += '00';
+									if (spacePos - dotPos == 3) add += '0';
 								}
 							}
-							str=[str.slice(0,spacePos),add,str.slice(spacePos)].join('');
+							str = [str.slice(0, spacePos), add, str.slice(spacePos)].join('');
 						}
 
 
-						str=loc("%1 cookie",{n:Math.round(Game.cookiesd),b:str});
-						if (str.length>14) str=str.replace(' ','<br>');
+						str = loc("%1 cookie", {n: Math.round(Game.cookiesd), b: str});
+						if (str.length > 14) str = str.replace(' ', '<br>');
 
 						if (Game.cookiesSucked > 0) {
 							str += '<br><span style="font-size:15px">Wrinklers: ' + Beautify(Math.round(epicCookie.functions.cookiesToSpendWithWrinklers())) + '</span>';
 						}
-						str+='<br><span style="font-size:15px">Prestige: ' + Beautify(Math.round(epicCookie.functions.prestigeWithWrinklers()-Game.prestige)) + '</span>'
-						if (Game.prefs.monospace) str='<span class="monospace">'+str+'</span>';
-						str=str+'<div id="cookiesPerSecond">CPS : '+Beautify(Game.cookiesPs)+ (Game.cpsSucked>0?' <div style="color:#f00">('+Beautify(Game.cookiesPs*(1-Game.cpsSucked),1)+')</div>':'')+'</div>';//display cookie amount
-						l('cookies').innerHTML=str;
+						str += '<br><span style="font-size:15px">Prestige: ' + Beautify(Math.round(epicCookie.functions.prestigeWithWrinklers() - Game.prestige)) + '</span>'
+						if (Game.prefs.monospace) str = '<span class="monospace">' + str + '</span>';
+						str = str + '<div id="cookiesPerSecond">CPS : ' + Beautify(Game.cookiesPs) + (Game.cpsSucked > 0 ? ' <div style="color:#f00">(' + Beautify(Game.cookiesPs * (1 - Game.cpsSucked), 1) + ')</div>' : '') + '</div>';//display cookie amount
+						l('cookies').innerHTML = str;
 						// l('cookies').style.top = 'calc(10% - 5px)';
 						Timer.track('cookie amount');
 
-						for (var i in Game.Objects)
-						{
-							var me=Game.Objects[i];
+						for (var i in Game.Objects) {
+							var me = Game.Objects[i];
 							if (me.onMinigame && me.minigame.draw && !me.muted) me.minigame.draw();
 						}
 						Timer.track('draw minigames');
 
-						if (Game.drawT%5==0)
-						{
+						if (Game.drawT % 5 == 0) {
 							//if (Game.prefs.monospace) {l('cookies').className='title monospace';} else {l('cookies').className='title';}
-							var lastLocked=0;
-							for (var i in Game.Objects)
-							{
-								var me=Game.Objects[i];
+							var lastLocked = 0;
+							for (var i in Game.Objects) {
+								var me = Game.Objects[i];
 
 								//make products full-opacity if we can buy them
-								var classes='product';
-								var price=me.bulkPrice;
-								if (Game.cookiesEarned>=me.basePrice || me.bought>0) {classes+=' unlocked';lastLocked=0;me.locked=0;if (me.id==19){Game.Win('Cookie Clicker');}} else {classes+=' locked';lastLocked++;me.locked=1;}
-								if ((Game.buyMode==1 && Game.cookies>=price) || (Game.buyMode==-1 && me.amount>0)) classes+=' enabled'; else classes+=' disabled';
-								if (lastLocked>2) classes+=' toggledOff';
-								me.l.className=classes;
+								var classes = 'product';
+								var price = me.bulkPrice;
+								if (Game.cookiesEarned >= me.basePrice || me.bought > 0) {
+									classes += ' unlocked';
+									lastLocked = 0;
+									me.locked = 0;
+									if (me.id == 19) {
+										Game.Win('Cookie Clicker');
+									}
+								} else {
+									classes += ' locked';
+									lastLocked++;
+									me.locked = 1;
+								}
+								if ((Game.buyMode == 1 && Game.cookies >= price) || (Game.buyMode == -1 && me.amount > 0)) classes += ' enabled'; else classes += ' disabled';
+								if (lastLocked > 2) classes += ' toggledOff';
+								me.l.className = classes;
 								//if (me.id>0) {l('productName'+me.id).innerHTML=Beautify(me.storedTotalCps/Game.ObjectsById[me.id-1].storedTotalCps,2);}
 							}
 
 							//make upgrades full-opacity if we can buy them
-							var lastPrice=0;
-							for (var i in Game.UpgradesInStore)
-							{
-								var me=Game.UpgradesInStore[i];
-								if (!me.bought)
-								{
-									var price=me.getPrice();
-									var canBuy=me.canBuy();//(Game.cookies>=price);
-									var enabled=(l('upgrade'+i).className.indexOf('enabled')>-1);
-									if ((canBuy && !enabled) || (!canBuy && enabled)) Game.upgradesToRebuild=1;
-									if (price<lastPrice) Game.storeToRefresh=1;//is this upgrade less expensive than the previous one? trigger a refresh to sort it again
-									lastPrice=price;
+							var lastPrice = 0;
+							for (var i in Game.UpgradesInStore) {
+								var me = Game.UpgradesInStore[i];
+								if (!me.bought) {
+									var price = me.getPrice();
+									var canBuy = me.canBuy();//(Game.cookies>=price);
+									var enabled = (l('upgrade' + i).className.indexOf('enabled') > -1);
+									if ((canBuy && !enabled) || (!canBuy && enabled)) Game.upgradesToRebuild = 1;
+									if (price < lastPrice) Game.storeToRefresh = 1;//is this upgrade less expensive than the previous one? trigger a refresh to sort it again
+									lastPrice = price;
 								}
-								if (me.timerDisplay)
-								{
-									var T=me.timerDisplay();
-									if (T!=-1)
-									{
-										if (!l('upgradePieTimer'+i)) l('upgrade'+i).innerHTML=l('upgrade'+i).innerHTML+'<div class="pieTimer" id="upgradePieTimer'+i+'"></div>';
-										T=(T*144)%144;
-										l('upgradePieTimer'+i).style.backgroundPosition=(-Math.floor(T%18))*48+'px '+(-Math.floor(T/18))*48+'px';
+								if (me.timerDisplay) {
+									var T = me.timerDisplay();
+									if (T != -1) {
+										if (!l('upgradePieTimer' + i)) l('upgrade' + i).innerHTML = l('upgrade' + i).innerHTML + '<div class="pieTimer" id="upgradePieTimer' + i + '"></div>';
+										T = (T * 144) % 144;
+										l('upgradePieTimer' + i).style.backgroundPosition = (-Math.floor(T % 18)) * 48 + 'px ' + (-Math.floor(T / 18)) * 48 + 'px';
 									}
 								}
 
@@ -268,21 +275,24 @@ var epicCookie = {
 
 						if (Game.PARTY)//i was bored and felt like messing with CSS
 						{
-							var pulse=Math.pow((Game.T%10)/10,0.5);
-							Game.l.style.filter='hue-rotate('+((Game.T*5)%360)+'deg) brightness('+(150-50*pulse)+'%)';
-							Game.l.style.webkitFilter='hue-rotate('+((Game.T*5)%360)+'deg) brightness('+(150-50*pulse)+'%)';
-							Game.l.style.transform='scale('+(1.02-0.02*pulse)+','+(1.02-0.02*pulse)+') rotate('+(Math.sin(Game.T*0.5)*0.5)+'deg)';
-							Game.wrapper.style.overflowX='hidden';
-							Game.wrapper.style.overflowY='hidden';
+							var pulse = Math.pow((Game.T % 10) / 10, 0.5);
+							Game.l.style.filter = 'hue-rotate(' + ((Game.T * 5) % 360) + 'deg) brightness(' + (150 - 50 * pulse) + '%)';
+							Game.l.style.webkitFilter = 'hue-rotate(' + ((Game.T * 5) % 360) + 'deg) brightness(' + (150 - 50 * pulse) + '%)';
+							Game.l.style.transform = 'scale(' + (1.02 - 0.02 * pulse) + ',' + (1.02 - 0.02 * pulse) + ') rotate(' + (Math.sin(Game.T * 0.5) * 0.5) + 'deg)';
+							Game.wrapper.style.overflowX = 'hidden';
+							Game.wrapper.style.overflowY = 'hidden';
 						}
 
 						Timer.clean();
-						if (Game.prefs.animate && ((Game.prefs.fancy && Game.drawT%1==0) || (!Game.prefs.fancy && Game.drawT%10==0)) && Game.AscendTimer==0 && Game.onMenu=='') Game.DrawBuildings();Timer.track('buildings');
+						if (Game.prefs.animate && ((Game.prefs.fancy && Game.drawT % 1 == 0) || (!Game.prefs.fancy && Game.drawT % 10 == 0)) && Game.AscendTimer == 0 && Game.onMenu == '') Game.DrawBuildings();
+						Timer.track('buildings');
 
-						Game.textParticlesUpdate();Timer.track('text particles');
+						Game.textParticlesUpdate();
+						Timer.track('text particles');
 					}
 
-					Game.NotesDraw();Timer.track('notes');
+					Game.NotesDraw();
+					Timer.track('notes');
 
 					Game.runModHook('draw');
 
@@ -294,7 +304,7 @@ var epicCookie = {
 				name: 'Update Menu Update',
 				oldFunction: 'Game.UpdateMenu',
 				hash: -1982944832,
-				newFunction: function() {
+				newFunction: function () {
 					var str = '';
 					if (Game.onMenu != '') {
 						str += '<div class="close menuClose" ' + Game.clickStr + '="Game.ShowMenu();">x</div>';
@@ -309,8 +319,8 @@ var epicCookie = {
 							'<div class="title">' + loc("General") +
 							((Game.Has('Wrapping paper') && Game.ascensionMode == 0) ? ('<div id="giftStuff" class="optionBox" style="float:right;text-align:right;clear:both;overflow:hidden;margin-top:-32px;' + ((Game.cookies >= 1000000000 && !Game.hasBuff('Gifted out')) ? '' : 'opacity:0.5;') + '">' +
 								'<div class="icon" style="display:inline-block;float:right;margin:-4px;width:48px;height:48px;position:relative;background-position:' + (-34 * 48) + 'px ' + (-6 * 48) + 'px;"></div><br>' +
-								'<a class="option" '+Game.clickStr+'="if (Game.cookies<1000000000 || Game.hasBuff(\'Gifted out\')){return false;}PlaySound(\'snd/tick.mp3\');Game.promptGiftSend();" style="position:relative;margin:0px;margin-bottom:2px;float:right;" '+Game.getTooltip('<div style="min-width:200px;text-align:center;font-size:11px;" id="tooltipGiftRedeem"><b>'+loc("Send a gift")+'</b>'+(Game.hasBuff('Gifted out')?'<br>'+loc("You've already sent or redeemed a gift recently."):'')+(Game.cookies<1000000000?'<br>'+loc("You need at least %1 cookies in bank to send and receive gifts.",loc("%1 cookie",LBeautify(1000000000))):'')+'</div>','this')+'>'+loc("Send")+'</a><br>'+
-								'<a class="option" '+Game.clickStr+'="if (Game.cookies<1000000000 || Game.hasBuff(\'Gifted out\')){return false;}PlaySound(\'snd/tick.mp3\');Game.promptGiftRedeem();" style="position:relative;margin:0px;float:right;" '+Game.getTooltip('<div style="min-width:200px;text-align:center;font-size:11px;" id="tooltipGiftRedeem"><b>'+loc("Redeem a gift")+'</b>'+(Game.hasBuff('Gifted out')?'<br>'+loc("You've already sent or redeemed a gift recently."):'')+(Game.cookies<1000000000?'<br>'+loc("You need at least %1 cookies in bank to send and receive gifts.",loc("%1 cookie",LBeautify(1000000000))):'')+'</div>','this')+'>'+loc("Redeem")+'</a>'+
+								'<a class="option" ' + Game.clickStr + '="if (Game.cookies<1000000000 || Game.hasBuff(\'Gifted out\')){return false;}PlaySound(\'snd/tick.mp3\');Game.promptGiftSend();" style="position:relative;margin:0px;margin-bottom:2px;float:right;" ' + Game.getTooltip('<div style="min-width:200px;text-align:center;font-size:11px;" id="tooltipGiftRedeem"><b>' + loc("Send a gift") + '</b>' + (Game.hasBuff('Gifted out') ? '<br>' + loc("You've already sent or redeemed a gift recently.") : '') + (Game.cookies < 1000000000 ? '<br>' + loc("You need at least %1 cookies in bank to send and receive gifts.", loc("%1 cookie", LBeautify(1000000000))) : '') + '</div>', 'this') + '>' + loc("Send") + '</a><br>' +
+								'<a class="option" ' + Game.clickStr + '="if (Game.cookies<1000000000 || Game.hasBuff(\'Gifted out\')){return false;}PlaySound(\'snd/tick.mp3\');Game.promptGiftRedeem();" style="position:relative;margin:0px;float:right;" ' + Game.getTooltip('<div style="min-width:200px;text-align:center;font-size:11px;" id="tooltipGiftRedeem"><b>' + loc("Redeem a gift") + '</b>' + (Game.hasBuff('Gifted out') ? '<br>' + loc("You've already sent or redeemed a gift recently.") : '') + (Game.cookies < 1000000000 ? '<br>' + loc("You need at least %1 cookies in bank to send and receive gifts.", loc("%1 cookie", LBeautify(1000000000))) : '') + '</div>', 'this') + '>' + loc("Redeem") + '</a>' +
 								'</div>') : '') +
 							'</div>' +
 							'<div class="listing" style="text-align:center;"><div style="display:inline-block;padding:2px 8px;opacity:0.75;font-size:12px;vertical-align:middle;" class="smallFancyButton">' + loc("Language: %1", '<b>' + Langs[locId].name + '</b>') + '</div><div class="icon" style="vertical-align:middle;display:inline-block;background-position:' + (-30 * 48) + 'px ' + (-29 * 48) + 'px;transform:scale(0.5);margin:-16px -12px;"></div><a style="font-size:15px;text-align:center;width:auto;min-width:130px;" class="option smallFancyButton" id="changeLanguageOption" ' + Game.clickStr + '="PlaySound(\'snd/tick.mp3\');Game.showLangSelection();">' + (!EN ? 'Change language<div class="line"></div>' : '') + loc("Change language") + '</a><div style="clear:both;text-align:right;padding-bottom:2px;"></div></div>' +
@@ -485,8 +495,8 @@ var epicCookie = {
 						if (Game.Has('A festive hat')) {
 							for (var i = 0; i <= Game.santaLevel; i++) {
 								santaStr += '<div ' + Game.getTooltip(
-									'<div class="prompt" style="text-align:center;padding-bottom:6px;white-space:nowrap;margin:0px 32px;"><div style="width:96px;height:96px;margin:4px auto;background:url('+Game.resPath+'img/santa.png?v='+Game.version+') '+(-i*96)+'px 0px;filter:drop-shadow(0px 3px 2px #000);-webkit-filter:drop-shadow(0px 3px 2px #000);" id="tooltipSanta"></div><div class="line"></div><h3>'+Game.santaLevels[i]+'</h3></div>'
-									,'top')+' style="background:url('+Game.resPath+'img/santa.png?v='+Game.version+') '+(-i*48)+'px 0px;background-size:'+(frames*48)+'px 48px;" class="trophy"></div>';
+									'<div class="prompt" style="text-align:center;padding-bottom:6px;white-space:nowrap;margin:0px 32px;"><div style="width:96px;height:96px;margin:4px auto;background:url(' + Game.resPath + 'img/santa.png?v=' + Game.version + ') ' + (-i * 96) + 'px 0px;filter:drop-shadow(0px 3px 2px #000);-webkit-filter:drop-shadow(0px 3px 2px #000);" id="tooltipSanta"></div><div class="line"></div><h3>' + Game.santaLevels[i] + '</h3></div>'
+									, 'top') + ' style="background:url(' + Game.resPath + 'img/santa.png?v=' + Game.version + ') ' + (-i * 48) + 'px 0px;background-size:' + (frames * 48) + 'px 48px;" class="trophy"></div>';
 							}
 							santaStr += '<div style="clear:both;"></div>';
 						}
@@ -499,8 +509,8 @@ var epicCookie = {
 									var level = Game.dragonLevels[mainLevels[i]];
 									dragonStr += '<div ' + Game.getTooltip(
 										//'<div style="width:96px;height:96px;margin:4px auto;background:url('+Game.resPath+'img/dragon.png?v='+Game.version+') '+(-level.pic*96)+'px 0px;"></div><div class="line"></div><div style="min-width:200px;text-align:center;margin-bottom:6px;">'+level.name+'</div>'
-										'<div class="prompt" style="text-align:center;padding-bottom:6px;white-space:nowrap;margin:0px 32px;" id="tooltipDragon"><div style="width:96px;height:96px;margin:4px auto;background:url('+Game.resPath+'img/dragon.png?v='+Game.version+') '+(-level.pic*96)+'px 0px;filter:drop-shadow(0px 3px 2px #000);-webkit-filter:drop-shadow(0px 3px 2px #000);"></div><div class="line"></div><h3>'+level.name+'</h3></div>'
-										,'top')+' style="background:url('+Game.resPath+'img/dragon.png?v='+Game.version+') '+(-level.pic*48)+'px 0px;background-size:'+(frames*48)+'px 48px;" class="trophy"></div>';
+										'<div class="prompt" style="text-align:center;padding-bottom:6px;white-space:nowrap;margin:0px 32px;" id="tooltipDragon"><div style="width:96px;height:96px;margin:4px auto;background:url(' + Game.resPath + 'img/dragon.png?v=' + Game.version + ') ' + (-level.pic * 96) + 'px 0px;filter:drop-shadow(0px 3px 2px #000);-webkit-filter:drop-shadow(0px 3px 2px #000);"></div><div class="line"></div><h3>' + level.name + '</h3></div>'
+										, 'top') + ' style="background:url(' + Game.resPath + 'img/dragon.png?v=' + Game.version + ') ' + (-level.pic * 48) + 'px 0px;background-size:' + (frames * 48) + 'px 48px;" class="trophy"></div>';
 								}
 							}
 							dragonStr += '<div style="clear:both;"></div>';
@@ -658,28 +668,29 @@ var epicCookie = {
 				oldFunction: 'Game.ShowMenu',
 				hash: 935280345,
 				newFunction: what => {
-					if (!what || what=='') what=Game.onMenu;
-					if (Game.onMenu=='' && what!='') Game.addClass('onMenu');
-					else if (Game.onMenu!='' && what!=Game.onMenu) Game.addClass('onMenu');
-					else if (what==Game.onMenu) {Game.removeClass('onMenu');what='';}
+					if (!what || what == '') what = Game.onMenu;
+					if (Game.onMenu == '' && what != '') Game.addClass('onMenu');
+					else if (Game.onMenu != '' && what != Game.onMenu) Game.addClass('onMenu');
+					else if (what == Game.onMenu) {
+						Game.removeClass('onMenu');
+						what = '';
+					}
 					//if (what=='log') l('donateBox').className='on'; else l('donateBox').className='';
-					Game.onMenu=what;
+					Game.onMenu = what;
 
-					l('prefsButton').className=(Game.onMenu=='prefs')?'panelButton selected':'panelButton';
-					l('statsButton').className=(Game.onMenu=='stats')?'panelButton selected':'panelButton';
-					l('logButton').className=(Game.onMenu=='log')?'panelButton selected':'panelButton';
-					l('epicButton').className=(Game.onMenu=='epic')?'panelButton selected':'panelButton';
+					l('prefsButton').className = (Game.onMenu == 'prefs') ? 'panelButton selected' : 'panelButton';
+					l('statsButton').className = (Game.onMenu == 'stats') ? 'panelButton selected' : 'panelButton';
+					l('logButton').className = (Game.onMenu == 'log') ? 'panelButton selected' : 'panelButton';
+					l('epicButton').className = (Game.onMenu == 'epic') ? 'panelButton selected' : 'panelButton';
 
-					if (Game.onMenu=='') PlaySound('snd/clickOff.mp3');
+					if (Game.onMenu == '') PlaySound('snd/clickOff.mp3');
 					else PlaySound('snd/clickOn.mp3');
 
 					Game.UpdateMenu();
 
-					if (what=='')
-					{
-						for (var i in Game.Objects)
-						{
-							var me=Game.Objects[i];
+					if (what == '') {
+						for (var i in Game.Objects) {
+							var me = Game.Objects[i];
 							if (me.minigame && me.minigame.onResize) me.minigame.onResize();
 						}
 					}
@@ -690,35 +701,34 @@ var epicCookie = {
 				oldFunction: 'Game.Ascend',
 				description: "Wont let you ascend if you haven't used the Sugar Frenzy yet",
 				hash: 648295687,
-				newFunction: bypass =>
-				{
+				newFunction: bypass => {
 					// beginning of EPIC changes
 					if (!epicCookie.sugarFrenzy.canAscend()) {
-						Game.Notify('Sugar Frenzy Block','You have not used Sugar Frenzy yet this ascension! (You can turn off Sugar Frenzy Protect in the Epic Settings menu.)',[22,17],4);
+						Game.Notify('Sugar Frenzy Block', 'You have not used Sugar Frenzy yet this ascension! (You can turn off Sugar Frenzy Protect in the Epic Settings menu.)', [22, 17], 4);
 						return;
 					}
 					// end of EPIC changes
 
-					if (!bypass) Game.Prompt('<id Ascend><h3>'+loc("Ascend")+'</h3><div class="block">'+tinyIcon([19,7])+'<div class="line"></div>'+loc("Do you REALLY want to ascend?<div class=\"line\"></div>You will lose your progress and start over from scratch.<div class=\"line\"></div>All your cookies will be converted into prestige and heavenly chips.")+'<div class="line"></div>'+(Game.canLumps()?loc("You will keep your achievements, building levels and sugar lumps."):loc("You will keep your achievements."))+'<div class="optionBox"><a class="option smallFancyButton" style="margin:16px;padding:8px 16px;animation:rainbowCycle 5s infinite ease-in-out,pucker 0.2s ease-out;box-shadow:0px 0px 0px 1px #000,0px 0px 1px 2px currentcolor;background:linear-gradient(to bottom,transparent 0%,currentColor 500%);width:auto;text-align:center;" '+Game.clickStr+'="PlaySound(\'snd/tick.mp3\');Game.ClosePrompt();Game.Ascend(1);" id="promptOption0">'+loc("Ascend")+'</a></div></div>',[[loc("Yes"),'Game.ClosePrompt();Game.Ascend(1);','float:left;display:none;'],[loc("Cancel"),0,'float:right']]);
-					else
-					{
+					if (!bypass) Game.Prompt('<id Ascend><h3>' + loc("Ascend") + '</h3><div class="block">' + tinyIcon([19, 7]) + '<div class="line"></div>' + loc("Do you REALLY want to ascend?<div class=\"line\"></div>You will lose your progress and start over from scratch.<div class=\"line\"></div>All your cookies will be converted into prestige and heavenly chips.") + '<div class="line"></div>' + (Game.canLumps() ? loc("You will keep your achievements, building levels and sugar lumps.") : loc("You will keep your achievements.")) + '<div class="optionBox"><a class="option smallFancyButton" style="margin:16px;padding:8px 16px;animation:rainbowCycle 5s infinite ease-in-out,pucker 0.2s ease-out;box-shadow:0px 0px 0px 1px #000,0px 0px 1px 2px currentcolor;background:linear-gradient(to bottom,transparent 0%,currentColor 500%);width:auto;text-align:center;" ' + Game.clickStr + '="PlaySound(\'snd/tick.mp3\');Game.ClosePrompt();Game.Ascend(1);" id="promptOption0">' + loc("Ascend") + '</a></div></div>', [[loc("Yes"), 'Game.ClosePrompt();Game.Ascend(1);', 'float:left;display:none;'], [loc("Cancel"), 0, 'float:right']]);
+					else {
 						if (Game.prefs.popups) Game.Popup('Ascending');
-						else Game.Notify('Ascending','So long, cookies.',[20,7],4);
-						Game.OnAscend=0;Game.removeClass('ascending');
+						else Game.Notify('Ascending', 'So long, cookies.', [20, 7], 4);
+						Game.OnAscend = 0;
+						Game.removeClass('ascending');
 						Game.addClass('ascendIntro');
 						//trigger the ascend animation
-						Game.AscendTimer=1;
+						Game.AscendTimer = 1;
 						Game.killShimmers();
-						l('toggleBox').style.display='none';
-						l('toggleBox').innerHTML='';
-						Game.choiceSelectorOn=-1;
+						l('toggleBox').style.display = 'none';
+						l('toggleBox').innerHTML = '';
+						Game.choiceSelectorOn = -1;
 						Game.ToggleSpecialMenu(0);
-						Game.AscendOffX=0;
-						Game.AscendOffY=0;
-						Game.AscendOffXT=0;
-						Game.AscendOffYT=0;
-						Game.AscendZoomT=1;
-						Game.AscendZoom=0.2;
+						Game.AscendOffX = 0;
+						Game.AscendOffY = 0;
+						Game.AscendOffXT = 0;
+						Game.AscendOffYT = 0;
+						Game.AscendZoomT = 1;
+						Game.AscendZoom = 0.2;
 
 						Game.jukebox.reset();
 						PlayCue('preascend');
@@ -731,13 +741,14 @@ var epicCookie = {
 				hash: 213105795,
 				newFunction: () => {
 					// beginning of EPIC changes 1/2
-					const wrinklerComplaints = ['What do you want!?','Ouch!','Oh, the humanity!','That tickled!','Oof','Stop that!','NoooOOOOoooo!','oh well','ugh!'];
+					const wrinklerComplaints = ['What do you want!?', 'Ouch!', 'Oh, the humanity!', 'That tickled!', 'Oof', 'Stop that!', 'NoooOOOOoooo!', 'oh well', 'ugh!'];
 					var inRect = (x, y, rect) => {
 						//find out if the point x,y is in the rotated rectangle rect{w,h,r,o} (width,height,rotation in radians,y-origin) (needs to be normalized)
 						//I found this somewhere online I guess
-						var dx = x+Math.sin(-rect.r)*(-(rect.h/2-rect.o)),dy=y+Math.cos(-rect.r)*(-(rect.h/2-rect.o));
-						var h1 = Math.sqrt(dx*dx + dy*dy);
-						var currA = Math.atan2(dy,dx);
+						var dx = x + Math.sin(-rect.r) * (-(rect.h / 2 - rect.o)),
+							dy = y + Math.cos(-rect.r) * (-(rect.h / 2 - rect.o));
+						var h1 = Math.sqrt(dx * dx + dy * dy);
+						var currA = Math.atan2(dy, dx);
 						var newA = currA - rect.r;
 						var x2 = Math.cos(newA) * h1;
 						var y2 = Math.sin(newA) * h1;
@@ -746,215 +757,190 @@ var epicCookie = {
 					}
 					// end of EPIC changes 1/2
 
-					var xBase=0;
-					var yBase=0;
-					var onWrinkler=0;
-					if (Game.LeftBackground)
-					{
-						xBase=Game.cookieOriginX;
-						yBase=Game.cookieOriginY;
+					var xBase = 0;
+					var yBase = 0;
+					var onWrinkler = 0;
+					if (Game.LeftBackground) {
+						xBase = Game.cookieOriginX;
+						yBase = Game.cookieOriginY;
 					}
-					var max=Game.getWrinklersMax();
-					var n=0;
-					for (var i in Game.wrinklers)
-					{
-						if (Game.wrinklers[i].phase>0) n++;
+					var max = Game.getWrinklersMax();
+					var n = 0;
+					for (var i in Game.wrinklers) {
+						if (Game.wrinklers[i].phase > 0) n++;
 					}
-					for (var i in Game.wrinklers)
-					{
-						var me=Game.wrinklers[i];
-						if (me.phase==0 && Game.elderWrath>0 && n<max && me.id<max)
-						{
-							var chance=0.00001*Game.elderWrath;
-							chance*=Game.eff('wrinklerSpawn');
-							if (Game.Has('Unholy bait')) chance*=5;
-							if (Game.hasGod)
-							{
-								var godLvl=Game.hasGod('scorn');
-								if (godLvl==1) chance*=2.5;
-								else if (godLvl==2) chance*=2;
-								else if (godLvl==3) chance*=1.5;
+					for (var i in Game.wrinklers) {
+						var me = Game.wrinklers[i];
+						if (me.phase == 0 && Game.elderWrath > 0 && n < max && me.id < max) {
+							var chance = 0.00001 * Game.elderWrath;
+							chance *= Game.eff('wrinklerSpawn');
+							if (Game.Has('Unholy bait')) chance *= 5;
+							if (Game.hasGod) {
+								var godLvl = Game.hasGod('scorn');
+								if (godLvl == 1) chance *= 2.5;
+								else if (godLvl == 2) chance *= 2;
+								else if (godLvl == 3) chance *= 1.5;
 							}
-							if (Game.Has('Wrinkler doormat')) chance=0.1;
-							if (Math.random()<chance)//respawn
+							if (Game.Has('Wrinkler doormat')) chance = 0.1;
+							if (Math.random() < chance)//respawn
 							{
 								Game.SpawnWrinkler(me);
 							}
 						}
-						if (me.phase>0)
-						{
-							if (me.close<1) me.close+=(1/Game.fps)/10;
-							if (me.close>1) me.close=1;
-							if (me.id>=max) me.hp=0;
+						if (me.phase > 0) {
+							if (me.close < 1) me.close += (1 / Game.fps) / 10;
+							if (me.close > 1) me.close = 1;
+							if (me.id >= max) me.hp = 0;
+						} else me.close = 0;
+						if (me.close == 1 && me.phase == 1) {
+							me.phase = 2;
+							Game.recalculateGains = 1;
 						}
-						else me.close=0;
-						if (me.close==1 && me.phase==1)
-						{
-							me.phase=2;
-							Game.recalculateGains=1;
+						if (me.phase == 2) {
+							me.sucked += (((Game.cookiesPs / Game.fps) * Game.cpsSucked));//suck the cookies
 						}
-						if (me.phase==2)
-						{
-							me.sucked+=(((Game.cookiesPs/Game.fps)*Game.cpsSucked));//suck the cookies
-						}
-						if (me.phase>0)
-						{
-							if (me.type==0)
-							{
-								if (me.hp<Game.wrinklerHP) me.hp+=0.04;
-								me.hp=Math.min(Game.wrinklerHP,me.hp);
+						if (me.phase > 0) {
+							if (me.type == 0) {
+								if (me.hp < Game.wrinklerHP) me.hp += 0.04;
+								me.hp = Math.min(Game.wrinklerHP, me.hp);
+							} else if (me.type == 1) {
+								if (me.hp < Game.wrinklerHP * 3) me.hp += 0.04;
+								me.hp = Math.min(Game.wrinklerHP * 3, me.hp);
 							}
-							else if (me.type==1)
-							{
-								if (me.hp<Game.wrinklerHP*3) me.hp+=0.04;
-								me.hp=Math.min(Game.wrinklerHP*3,me.hp);
+							var d = 128 * (2 - me.close);//*Game.BigCookieSize;
+							if (Game.prefs.fancy) d += Math.cos(Game.T * 0.05 + parseInt(me.id)) * 4;
+							me.r = (me.id / max) * 360;
+							if (Game.prefs.fancy) me.r += Math.sin(Game.T * 0.05 + parseInt(me.id)) * 4;
+							me.x = xBase + (Math.sin(me.r * Math.PI / 180) * d);
+							me.y = yBase + (Math.cos(me.r * Math.PI / 180) * d);
+							if (Game.prefs.fancy) me.r += Math.sin(Game.T * 0.09 + parseInt(me.id)) * 4;
+							var rect = {w: 100, h: 200, r: (-me.r) * Math.PI / 180, o: 10};
+							if (Math.random() < 0.01) me.hurt = Math.max(me.hurt, Math.random());
+							if (Game.T % 5 == 0 && Game.CanClick) {
+								if (Game.LeftBackground && Game.mouseX < Game.LeftBackground.canvas.width && inRect(Game.mouseX - me.x, Game.mouseY - me.y, rect)) me.selected = 1; else me.selected = 0;
 							}
-							var d=128*(2-me.close);//*Game.BigCookieSize;
-							if (Game.prefs.fancy) d+=Math.cos(Game.T*0.05+parseInt(me.id))*4;
-							me.r=(me.id/max)*360;
-							if (Game.prefs.fancy) me.r+=Math.sin(Game.T*0.05+parseInt(me.id))*4;
-							me.x=xBase+(Math.sin(me.r*Math.PI/180)*d);
-							me.y=yBase+(Math.cos(me.r*Math.PI/180)*d);
-							if (Game.prefs.fancy) me.r+=Math.sin(Game.T*0.09+parseInt(me.id))*4;
-							var rect={w:100,h:200,r:(-me.r)*Math.PI/180,o:10};
-							if (Math.random()<0.01) me.hurt=Math.max(me.hurt,Math.random());
-							if (Game.T%5==0 && Game.CanClick) {if (Game.LeftBackground && Game.mouseX<Game.LeftBackground.canvas.width && inRect(Game.mouseX-me.x,Game.mouseY-me.y,rect)) me.selected=1; else me.selected=0;}
-							if (me.selected && onWrinkler==0 && Game.CanClick)
-							{
-								me.hurt=Math.max(me.hurt,0.25);
+							if (me.selected && onWrinkler == 0 && Game.CanClick) {
+								me.hurt = Math.max(me.hurt, 0.25);
 								//me.close*=0.99;
-								if (Game.Click && Game.lastClickedEl==l('backgroundLeftCanvas'))
-								{
-									if (Game.keys[17] && Game.sesame) {me.type=!me.type;PlaySound('snd/shimmerClick.mp3');}//ctrl-click on a wrinkler in god mode to toggle its shininess
-									else
-									{
+								if (Game.Click && Game.lastClickedEl == l('backgroundLeftCanvas')) {
+									if (Game.keys[17] && Game.sesame) {
+										me.type = !me.type;
+										PlaySound('snd/shimmerClick.mp3');
+									}//ctrl-click on a wrinkler in god mode to toggle its shininess
+									else {
 										Game.playWrinklerSquishSound();
 										me.clicks++;
-										if (me.clicks>=50) Game.Win('Wrinkler poker');
-										me.hurt=1;
-										me.hp-=0.75;
-										if (Game.prefs.particles && !Game.prefs.notScary && !Game.WINKLERS && !(me.hp<=0.5 && me.phase>0))
-										{
-											var x=me.x+(Math.sin(me.r*Math.PI/180)*90);
-											var y=me.y+(Math.cos(me.r*Math.PI/180)*90);
-											for (var ii=0;ii<3;ii++)
-											{
+										if (me.clicks >= 50) Game.Win('Wrinkler poker');
+										me.hurt = 1;
+										me.hp -= 0.75;
+										if (Game.prefs.particles && !Game.prefs.notScary && !Game.WINKLERS && !(me.hp <= 0.5 && me.phase > 0)) {
+											var x = me.x + (Math.sin(me.r * Math.PI / 180) * 90);
+											var y = me.y + (Math.cos(me.r * Math.PI / 180) * 90);
+											for (var ii = 0; ii < 3; ii++) {
 												//Game.particleAdd(x+Math.random()*50-25,y+Math.random()*50-25,Math.random()*4-2,Math.random()*-2-2,1,1,2,'wrinklerBits.png');
-												var part=Game.particleAdd(x,y,Math.random()*4-2,Math.random()*-2-2,1,1,2,me.type==1?'shinyWrinklerBits.png':'wrinklerBits.png');
-												part.r=-me.r;
+												var part = Game.particleAdd(x, y, Math.random() * 4 - 2, Math.random() * -2 - 2, 1, 1, 2, me.type == 1 ? 'shinyWrinklerBits.png' : 'wrinklerBits.png');
+												part.r = -me.r;
 											}
 										}
 
 										// beginning of EPIC changes 2/2
-										if (me.hp > 0.5 && Game.prefs.epicWrinklerComplaints) Game.Notify(choose(wrinklerComplaints),'<b>HP: '+Beautify(me.hp, 2)+'</b>',[19,8],6);
+										if (me.hp > 0.5 && Game.prefs.epicWrinklerComplaints) Game.Notify(choose(wrinklerComplaints), '<b>HP: ' + Beautify(me.hp, 2) + '</b>', [19, 8], 6);
 										// end of EPIC changes 2/2
 									}
-									Game.Click=0;
+									Game.Click = 0;
 								}
-								onWrinkler=1;
+								onWrinkler = 1;
 							}
 						}
 
-						if (me.hurt>0)
-						{
-							me.hurt-=5/Game.fps;
+						if (me.hurt > 0) {
+							me.hurt -= 5 / Game.fps;
 							//me.close-=me.hurt*0.05;
 							//me.x+=Math.random()*2-1;
 							//me.y+=Math.random()*2-1;
-							me.r+=(Math.sin(Game.T*1)*me.hurt)*18;//Math.random()*2-1;
+							me.r += (Math.sin(Game.T * 1) * me.hurt) * 18;//Math.random()*2-1;
 						}
-						if (me.hp<=0.5 && me.phase>0)
-						{
+						if (me.hp <= 0.5 && me.phase > 0) {
 							Game.playWrinklerSquishSound();
-							PlaySound('snd/pop'+Math.floor(Math.random()*3+1)+'.mp3',0.75);
+							PlaySound('snd/pop' + Math.floor(Math.random() * 3 + 1) + '.mp3', 0.75);
 							Game.wrinklersPopped++;
-							Game.recalculateGains=1;
-							me.phase=0;
-							me.close=0;
-							me.hurt=0;
-							me.hp=3;
-							var toSuck=1.1;
-							if (Game.Has('Sacrilegious corruption')) toSuck*=1.05;
-							me.sucked*=1+Game.auraMult('Dragon Guts')*0.2;
-							if (me.type==1) toSuck*=3;//shiny wrinklers are an elusive, profitable breed
-							me.sucked*=toSuck;//cookie dough does weird things inside wrinkler digestive tracts
-							if (Game.Has('Wrinklerspawn')) me.sucked*=1.05;
-							if (Game.hasGod)
-							{
-								var godLvl=Game.hasGod('scorn');
-								if (godLvl==1) me.sucked*=1.15;
-								else if (godLvl==2) me.sucked*=1.1;
-								else if (godLvl==3) me.sucked*=1.05;
+							Game.recalculateGains = 1;
+							me.phase = 0;
+							me.close = 0;
+							me.hurt = 0;
+							me.hp = 3;
+							var toSuck = 1.1;
+							if (Game.Has('Sacrilegious corruption')) toSuck *= 1.05;
+							me.sucked *= 1 + Game.auraMult('Dragon Guts') * 0.2;
+							if (me.type == 1) toSuck *= 3;//shiny wrinklers are an elusive, profitable breed
+							me.sucked *= toSuck;//cookie dough does weird things inside wrinkler digestive tracts
+							if (Game.Has('Wrinklerspawn')) me.sucked *= 1.05;
+							if (Game.hasGod) {
+								var godLvl = Game.hasGod('scorn');
+								if (godLvl == 1) me.sucked *= 1.15;
+								else if (godLvl == 2) me.sucked *= 1.1;
+								else if (godLvl == 3) me.sucked *= 1.05;
 							}
-							if (me.sucked>0.5)
-							{
-								if (Game.prefs.popups) Game.Popup('Exploded a '+(me.type==1?'shiny ':'')+'wrinkler : found '+Beautify(me.sucked)+' cookies!');
-								else Game.Notify('Exploded a '+(me.type==1?'shiny ':'')+'wrinkler','Found <b>'+Beautify(me.sucked)+'</b> cookies!',[19,8],6);
-								Game.Popup('<div style="font-size:80%;">+'+Beautify(me.sucked)+' cookies</div>',Game.mouseX,Game.mouseY);
+							if (me.sucked > 0.5) {
+								if (Game.prefs.popups) Game.Popup('Exploded a ' + (me.type == 1 ? 'shiny ' : '') + 'wrinkler : found ' + Beautify(me.sucked) + ' cookies!');
+								else Game.Notify('Exploded a ' + (me.type == 1 ? 'shiny ' : '') + 'wrinkler', 'Found <b>' + Beautify(me.sucked) + '</b> cookies!', [19, 8], 6);
+								Game.Popup('<div style="font-size:80%;">+' + Beautify(me.sucked) + ' cookies</div>', Game.mouseX, Game.mouseY);
 
-								if (Game.season=='halloween')
-								{
+								if (Game.season == 'halloween') {
 									//if (Math.random()<(Game.HasAchiev('Spooky cookies')?0.2:0.05))//halloween cookie drops
-									var failRate=0.95;
-									if (Game.HasAchiev('Spooky cookies')) failRate=0.8;
-									if (Game.Has('Starterror')) failRate*=0.9;
-									failRate*=1/Game.dropRateMult();
-									if (Game.hasGod)
-									{
-										var godLvl=Game.hasGod('seasons');
-										if (godLvl==1) failRate*=0.9;
-										else if (godLvl==2) failRate*=0.95;
-										else if (godLvl==3) failRate*=0.97;
+									var failRate = 0.95;
+									if (Game.HasAchiev('Spooky cookies')) failRate = 0.8;
+									if (Game.Has('Starterror')) failRate *= 0.9;
+									failRate *= 1 / Game.dropRateMult();
+									if (Game.hasGod) {
+										var godLvl = Game.hasGod('seasons');
+										if (godLvl == 1) failRate *= 0.9;
+										else if (godLvl == 2) failRate *= 0.95;
+										else if (godLvl == 3) failRate *= 0.97;
 									}
-									if (me.type==1) failRate*=0.9;
+									if (me.type == 1) failRate *= 0.9;
 									var random = Math.random();
-									if (random>failRate)//halloween cookie drops
+									if (random > failRate)//halloween cookie drops
 									{
-										var cookie=choose(['Skull cookies','Ghost cookies','Bat cookies','Slime cookies','Pumpkin cookies','Eyeball cookies','Spider cookies']);
-										if (!Game.HasUnlocked(cookie) && !Game.Has(cookie))
-										{
+										var cookie = choose(['Skull cookies', 'Ghost cookies', 'Bat cookies', 'Slime cookies', 'Pumpkin cookies', 'Eyeball cookies', 'Spider cookies']);
+										if (!Game.HasUnlocked(cookie) && !Game.Has(cookie)) {
 											Game.Unlock(cookie);
-											if (Game.prefs.popups) Game.Popup('Found : '+cookie+'!');
-											else Game.Notify(cookie,'You also found <b>'+cookie+'</b>!',Game.Upgrades[cookie].icon, 6);
-										} else Game.Notify('Almost Got One!','You already have a <b>'+cookie+'</b>',Game.Upgrades[cookie].icon, 6)
-									} else Game.Notify('No spooky biscuit for you!',Beautify(random*100)+'/'+Beautify(failRate*100),[0,12], 6)
+											if (Game.prefs.popups) Game.Popup('Found : ' + cookie + '!');
+											else Game.Notify(cookie, 'You also found <b>' + cookie + '</b>!', Game.Upgrades[cookie].icon, 6);
+										} else Game.Notify('Almost Got One!', 'You already have a <b>' + cookie + '</b>', Game.Upgrades[cookie].icon, 6)
+									} else Game.Notify('No spooky biscuit for you!', Beautify(random * 100) + '/' + Beautify(failRate * 100), [0, 12], 6)
 								}
 								Game.DropEgg(0.98);
 							}
-							if (me.type==1) Game.Win('Last Chance to See');
+							if (me.type == 1) Game.Win('Last Chance to See');
 							Game.Earn(me.sucked);
 							/*if (Game.prefs.particles)
-                            {
-                                var x=me.x+(Math.sin(me.r*Math.PI/180)*100);
-                                var y=me.y+(Math.cos(me.r*Math.PI/180)*100);
-                                for (var ii=0;ii<6;ii++)
-                                {
-                                    Game.particleAdd(x+Math.random()*50-25,y+Math.random()*50-25,Math.random()*4-2,Math.random()*-2-2,1,1,2,'wrinklerBits.png');
-                                }
-                            }*/
-							if (Game.prefs.particles)
 							{
-								var x=me.x+(Math.sin(me.r*Math.PI/180)*90);
-								var y=me.y+(Math.cos(me.r*Math.PI/180)*90);
-								if (me.sucked>0)
+								var x=me.x+(Math.sin(me.r*Math.PI/180)*100);
+								var y=me.y+(Math.cos(me.r*Math.PI/180)*100);
+								for (var ii=0;ii<6;ii++)
 								{
-									for (var ii=0;ii<5;ii++)
-									{
-										Game.particleAdd(Game.mouseX,Game.mouseY,Math.random()*4-2,Math.random()*-2-2,Math.random()*0.5+0.75,1.5,2);
+									Game.particleAdd(x+Math.random()*50-25,y+Math.random()*50-25,Math.random()*4-2,Math.random()*-2-2,1,1,2,'wrinklerBits.png');
+								}
+							}*/
+							if (Game.prefs.particles) {
+								var x = me.x + (Math.sin(me.r * Math.PI / 180) * 90);
+								var y = me.y + (Math.cos(me.r * Math.PI / 180) * 90);
+								if (me.sucked > 0) {
+									for (var ii = 0; ii < 5; ii++) {
+										Game.particleAdd(Game.mouseX, Game.mouseY, Math.random() * 4 - 2, Math.random() * -2 - 2, Math.random() * 0.5 + 0.75, 1.5, 2);
 									}
 								}
-								for (var ii=0;ii<8;ii++)
-								{
-									var part=Game.particleAdd(x,y,Math.random()*4-2,Math.random()*-2-2,1,1,2,me.type==1?'shinyWrinklerBits.png':'wrinklerBits.png');
-									part.r=-me.r;
+								for (var ii = 0; ii < 8; ii++) {
+									var part = Game.particleAdd(x, y, Math.random() * 4 - 2, Math.random() * -2 - 2, 1, 1, 2, me.type == 1 ? 'shinyWrinklerBits.png' : 'wrinklerBits.png');
+									part.r = -me.r;
 								}
 							}
-							me.sucked=0;
+							me.sucked = 0;
 						}
 					}
-					if (onWrinkler)
-					{
-						Game.mousePointer=1;
+					if (onWrinkler) {
+						Game.mousePointer = 1;
 					}
 				}
 			},
@@ -963,48 +949,46 @@ var epicCookie = {
 				oldFunction: 'Game.DropEgg',
 				hash: -1700957859,
 				newFunction: failRate => {
-					failRate*=1/Game.dropRateMult();
-					if (Game.season!='easter') return;
-					if (Game.HasAchiev('Hide & seek champion')) failRate*=0.7;
-					if (Game.Has('Omelette')) failRate*=0.9;
-					if (Game.Has('Starspawn')) failRate*=0.9;
-					if (Game.hasGod)
-					{
-						var godLvl=Game.hasGod('seasons');
-						if (godLvl==1) failRate*=0.9;
-						else if (godLvl==2) failRate*=0.95;
-						else if (godLvl==3) failRate*=0.97;
+					failRate *= 1 / Game.dropRateMult();
+					if (Game.season != 'easter') return;
+					if (Game.HasAchiev('Hide & seek champion')) failRate *= 0.7;
+					if (Game.Has('Omelette')) failRate *= 0.9;
+					if (Game.Has('Starspawn')) failRate *= 0.9;
+					if (Game.hasGod) {
+						var godLvl = Game.hasGod('seasons');
+						if (godLvl == 1) failRate *= 0.9;
+						else if (godLvl == 2) failRate *= 0.95;
+						else if (godLvl == 3) failRate *= 0.97;
 					}
 					// beginning of EPIC changes 1/4
 					var random = Math.random();
-					if (random>=failRate)
-					{
+					if (random >= failRate) {
 						// end of EPIC changes 1/4
-						var drop='';
-						if (Math.random()<0.1) drop=choose(Game.rareEggDrops);
-						else drop=choose(Game.eggDrops);
+						var drop = '';
+						if (Math.random() < 0.1) drop = choose(Game.rareEggDrops);
+						else drop = choose(Game.eggDrops);
 						if (Game.Has(drop) || Game.HasUnlocked(drop))//reroll if we have it
 						{
 							// beginning of EPIC changes 2/4
-							Game.Notify('Almost Got One!','You already have a <b>'+drop+'</b>',Game.Upgrades[drop].icon, 6)
+							Game.Notify('Almost Got One!', 'You already have a <b>' + drop + '</b>', Game.Upgrades[drop].icon, 6)
 							// end of EPIC changes 2/4
-							if (Math.random()<0.1) drop=choose(Game.rareEggDrops);
-							else drop=choose(Game.eggDrops);
+							if (Math.random() < 0.1) drop = choose(Game.rareEggDrops);
+							else drop = choose(Game.eggDrops);
 
 						}
 						// beginning of EPIC changes 3/4
 						if (Game.Has(drop) || Game.HasUnlocked(drop)) {
-							Game.Notify('Almost Got One!','You already have a <b>'+drop+'</b>',Game.Upgrades[drop].icon, 6)
+							Game.Notify('Almost Got One!', 'You already have a <b>' + drop + '</b>', Game.Upgrades[drop].icon, 6)
 							return;
 						}
 						// end of EPIC changes 3/4
 						Game.Unlock(drop);
-						if (Game.prefs.popups) Game.Popup('You find :<br>'+drop+'!');
-						else Game.Notify('You found an egg!','<b>'+drop+'</b>',Game.Upgrades[drop].icon, 6);
+						if (Game.prefs.popups) Game.Popup('You find :<br>' + drop + '!');
+						else Game.Notify('You found an egg!', '<b>' + drop + '</b>', Game.Upgrades[drop].icon, 6);
 					}
 					// beginning of EPIC changes 4/4
 					else {
-						Game.Notify('No Egg Drop For You!',Beautify(random*100)+'/'+Beautify(failRate*100),[0,12], 6);
+						Game.Notify('No Egg Drop For You!', Beautify(random * 100) + '/' + Beautify(failRate * 100), [0, 12], 6);
 					}
 					// end of EPIC changes 4/4
 				}
@@ -1012,20 +996,22 @@ var epicCookie = {
 		]
 	},
 	functions: {
-		format: function(number, beautify) {
+		format: function (number, beautify) {
 			if (beautify || false) return Beautify(number);
 			return number;
 		},
-		countWrinklers: function() {
+		countWrinklers: function () {
 			return Game.wrinklers.length;
 		},
-		countShinyWrinklers: function() {
-			return Game.wrinklers.reduce((a, b) => { return a += b.type; }, 0);
+		countShinyWrinklers: function () {
+			return Game.wrinklers.reduce((a, b) => {
+				return a += b.type;
+			}, 0);
 		},
-		allMultiplier: function() {
+		allMultiplier: function () {
 			return 1 + ((this.wrinklerMultiplier() - 1) * (this.countWrinklers() + (this.countShinyWrinklers() * 2)));
 		},
-		wrinklerMultiplier: function(type) {
+		wrinklerMultiplier: function (type) {
 			// alogrithm taken from main.js?v=2.061:11454
 			var multiplier = 1.1;
 			if (Game.Has('Sacrilegious corruption')) multiplier *= 1.05;
@@ -1039,43 +1025,43 @@ var epicCookie = {
 			}
 			return multiplier;
 		},
-		cookiesFromWrinklers: function(beautify) {
-			var cookies = Game.wrinklers.reduce((function(a,b) {
+		cookiesFromWrinklers: function (beautify) {
+			var cookies = Game.wrinklers.reduce((function (a, b) {
 				return a + (b.sucked * this.wrinklerMultiplier(b.type));
 			}).bind(this), 0);
 			return this.format(cookies, beautify);
 		},
-		cookiesToSpendWithWrinklers: function(beautify) {
+		cookiesToSpendWithWrinklers: function (beautify) {
 			var cookies = Game.cookies + this.cookiesFromWrinklers();
 			return this.format(cookies, beautify);
 		},
-		cookiesEarnedWithWrinklers: function(beautify) {
+		cookiesEarnedWithWrinklers: function (beautify) {
 			var cookies = Game.cookiesEarned + this.cookiesFromWrinklers();
 			return this.format(cookies, beautify);
 		},
-		cookiesAllTimeWithWrinklers: function(beautify) {
+		cookiesAllTimeWithWrinklers: function (beautify) {
 			var cookies = Game.cookiesReset + this.cookiesEarnedWithWrinklers();
 			return this.format(cookies, beautify);
 		},
-		prestigeWithWrinklers: function(beautify) {
+		prestigeWithWrinklers: function (beautify) {
 			var prestige = Game.HowMuchPrestige(Game.cookiesReset + Game.cookiesEarned + this.cookiesFromWrinklers());
 			return this.format(prestige, beautify);
 		},
-		timeToCookies: function(cookies) {
+		timeToCookies: function (cookies) {
 
 		},
-		cookiesToPrestige: function(prestige, beautify) {
+		cookiesToPrestige: function (prestige, beautify) {
 			prestige = prestige || 1000000000000;
-			var cookiesLeft = Game.HowManyCookiesReset(prestige) - (Game.cookiesEarned+Game.cookiesReset+epicCookie.functions.cookiesFromWrinklers());
+			var cookiesLeft = Game.HowManyCookiesReset(prestige) - (Game.cookiesEarned + Game.cookiesReset + epicCookie.functions.cookiesFromWrinklers());
 			return this.format(cookiesLeft, beautify);
 		}
 	},
 	styleUpdater: {
 		sheetIndex: 0,
-		init: function() {
+		init: function () {
 			this.sheetIndex = this.getStyleSheet();
 		},
-		getStyleSheet: function() {
+		getStyleSheet: function () {
 			const regex = new RegExp('orteil\.dashnet\.org\/cookieclicker');
 			for (sheet in document.styleSheets) {
 				if (regex.test(document.styleSheets[sheet].href)) {
@@ -1083,7 +1069,7 @@ var epicCookie = {
 				}
 			}
 		},
-		findRule: function(selector) {
+		findRule: function (selector) {
 			for (rule in document.styleSheets[this.sheetIndex].rules) {
 				if (document.styleSheets[this.sheetIndex].rules[rule].selectorText == selector) {
 					return rule;
@@ -1091,7 +1077,7 @@ var epicCookie = {
 			}
 			return false;
 		},
-		addStyle: function(selector, rules) {
+		addStyle: function (selector, rules) {
 			const rule = this.findRule(selector);
 			if (rule !== false) {
 				console.error('unable to edit existing rules for ' + selector);
@@ -1101,19 +1087,21 @@ var epicCookie = {
 		}
 	},
 	epicButton: {
-		init: function() {
+		init: function () {
 			epicCookie.styleUpdater.addStyle('#epicButton', 'background-position: -100px 0px; top: 47px; left: 96px; border-radius: 14px; padding: 16px 17px; display: inline-block; text-align: center;');
 			epicCookie.styleUpdater.addStyle('#epicButton:hover, #epicButton.selected', 'background-position: -100px -96px;');
 			l('statsButton').insertAdjacentHTML('afterend', '<div id="epicButton" class="button">Epic</div>');
-			AddEvent(l('epicButton'),'click',function(){Game.ShowMenu('epic');});
+			AddEvent(l('epicButton'), 'click', function () {
+				Game.ShowMenu('epic');
+			});
 		}
 	},
 	wrinklerComplaints: {
 		enabled: false,
-		init: function() {
+		init: function () {
 			Game.prefs.epicWrinklerComplaints = this.enabled
 		},
-		toggle: function() {
+		toggle: function () {
 			this.enabled = !this.enabled;
 		}
 	},
@@ -1121,20 +1109,20 @@ var epicCookie = {
 		enabled: false,
 		wrinklerPopperId: "wrinklerPopper",
 		popperImage: "https://i.pinimg.com/originals/6a/aa/80/6aaa806cc939c049ed9c2bf4e99c9303.png",
-		init: function() {
+		init: function () {
 			Game.prefs.epicWriklerPopper = this.enabled;
 			this.update();
 		},
-		toggle: function() {
+		toggle: function () {
 			this.enabled = !this.enabled;
 			this.update();
 		},
-		update: function() {
+		update: function () {
 			let exists = this.exists();
 			if (!this.enabled && exists) this.destroy();
 			else if (this.enabled && !exists) this.create();
 		},
-		create: function() {
+		create: function () {
 			var wrinklerPopper = document.createElement('div');
 			wrinklerPopper.id = this.wrinklerPopperId;
 
@@ -1151,17 +1139,19 @@ var epicCookie = {
 
 			document.getElementById("sectionLeft").appendChild(wrinklerPopper);
 		},
-		destroy: function() {
+		destroy: function () {
 			document.getElementById(this.wrinklerPopper).remove();
 		},
-		exists: function() {
+		exists: function () {
 			return document.getElementById(this.wrinklerPopperId) !== null;
 		},
-		pop: function() {
+		pop: function () {
 			Game.CollectWrinklers();
 		},
-		popNonShiny: function() {
-			Game.wrinklers.forEach(wrinkler => { if (wrinkler.type !== 1) wrinkler.hp = 0; })
+		popNonShiny: function () {
+			Game.wrinklers.forEach(wrinkler => {
+				if (wrinkler.type !== 1) wrinkler.hp = 0;
+			})
 		}
 	},
 	cookieShield: {
@@ -1173,22 +1163,22 @@ var epicCookie = {
 		currentShield: 0,
 		autoCheckShimmeringVeil: 1,
 		checkedCount: 0,
-		init: function() {
+		init: function () {
 			Game.prefs.epicCookieShield = this.enabled;
 		},
-		toggle: function() {
+		toggle: function () {
 			this.enabled = !this.enabled;
 			if (!this.enabled && this.exists()) this.destroy();
 		},
-		loop: function() {
+		loop: function () {
 			let exists = this.exists();
 			if ((!Game.Has('Shimmering veil') || Game.Has('Shimmering veil [on]')) && exists) this.destroy();
 			if (Game.Has('Shimmering veil [off]') && !exists) this.create();
 		},
-		exists: function() {
+		exists: function () {
 			return document.getElementById(this.cookieShieldId) !== null;
 		},
-		create: function() {
+		create: function () {
 			var cookieShield = document.createElement('div');
 			cookieShield.id = this.cookieShieldId;
 
@@ -1205,7 +1195,7 @@ var epicCookie = {
 
 			document.getElementById("sectionLeft").appendChild(cookieShield);
 		},
-		destroy: function() {
+		destroy: function () {
 			document.getElementById(this.cookieShieldId).remove();
 		}
 	},
@@ -1213,13 +1203,13 @@ var epicCookie = {
 		enabled: true,
 		miniGame: Game.Objects["Wizard tower"].minigame,
 		spellOfChoice: 'conjure baked goods',
-		init: function() {
+		init: function () {
 			Game.prefs.epicAutoWizardry = this.enabled;
 		},
-		toggle: function() {
+		toggle: function () {
 			this.enabled = !this.enabled;
 		},
-		loop: function() {
+		loop: function () {
 			if (!Game.Objects["Wizard tower"].minigameLoaded) {
 				this.enabled = false;
 				return;
@@ -1228,13 +1218,13 @@ var epicCookie = {
 				this.cast();
 			}
 		},
-		cast: function() {
+		cast: function () {
 			spell = Game.Objects["Wizard tower"].minigame.spells[this.spellOfChoice];
 			Game.Objects["Wizard tower"].minigame.castSpell(spell);
 		}
 	},
 	stats: {
-		init: function() {
+		init: function () {
 			if (!!l('epicStats')) l('epicStats').remove();
 			var str = '<div id="epicStats" style="position:absolute; right:1px; bottom:50px; overflow:hidden; z-index:10; padding-right: 5px">';
 			str += '<div style="float: right;">Season Switches: <span id="epicSeasonSwitches"></span></div>';
@@ -1251,11 +1241,11 @@ var epicCookie = {
 			str += '<div style="clear: both;"></div>';
 			str += '<div style="float: right;">Fortunes: <span id="epicFortuneHas"></span> / <span id="epicFortuneTotal"></span></div>';
 			str += '</div>';
-			l('sectionLeftExtra').innerHTML=l('sectionLeftExtra').innerHTML+str;
+			l('sectionLeftExtra').innerHTML = l('sectionLeftExtra').innerHTML + str;
 
 			this.update();
 		},
-		update: function() {
+		update: function () {
 
 			l('epicSeasonSwitches').innerHTML = Game.seasonUses;
 
@@ -1276,27 +1266,28 @@ var epicCookie = {
 
 			// get fortune data
 			var list = Game.Tiers['fortune'].upgrades;
-			var fortunes=0;
-			for (var i in list)
-			{
+			var fortunes = 0;
+			for (var i in list) {
 				if (Game.Has(list[i].name)) fortunes++;
 			}
 
 			l('epicFortuneHas').innerHTML = fortunes;
 			l('epicFortuneTotal').innerHTML = list.length;
 
-			setTimeout(() => { this.update(); }, 1000);
+			setTimeout(() => {
+				this.update();
+			}, 1000);
 		}
 	},
 	autoBuyUpgrades: {
 		enabled: false,
-		init: function() {
+		init: function () {
 			Game.prefs.epicUpgrades = this.enabled;
 		},
-		toggle: function() {
+		toggle: function () {
 			this.enabled = !this.enabled;
 		},
-		loop: function() {
+		loop: function () {
 			for (var i in Game.UpgradesInStore) {
 				var me = Game.UpgradesById[Game.UpgradesInStore[i].id];
 				if (me.pool !== 'toggle' && me.canBuy()) {
@@ -1309,13 +1300,13 @@ var epicCookie = {
 		enabled: false,
 		currentBuilding: 0,
 		round: 100,
-		init: function() {
+		init: function () {
 			Game.prefs.epicBuildings = this.enabled;
 		},
-		toggle: function() {
+		toggle: function () {
 			this.enabled = !this.enabled;
 		},
-		loop: function() {
+		loop: function () {
 			var building = Game.ObjectsById[this.currentBuilding];
 			if (typeof building !== "undefined" && building.locked !== 1) {
 				var round = this.round;
@@ -1332,41 +1323,39 @@ var epicCookie = {
 	},
 	autoBuyDragonLevels: {
 		enabled: false,
-		init: function() {
+		init: function () {
 			Game.prefs.epicDragon = this.enabled;
 		},
-		toggle: function() {
+		toggle: function () {
 			this.enabled = !this.enabled;
 		},
-		loop: function() {
+		loop: function () {
 			if (Game.Has('A crumbly egg')) Game.UpgradeDragon();
 		}
 	},
 	autoBuySantaLevels: {
 		enabled: false,
-		init: function() {
+		init: function () {
 			Game.prefs.epicSanta = this.enabled;
 		},
-		toggle: function() {
+		toggle: function () {
 			this.enabled = !this.enabled;
 		},
-		loop: function() {
+		loop: function () {
 			if (Game.Has('A festive hat')) Game.UpgradeSanta();
 		}
 	},
 	sugarFrenzy: {
 		enabled: true,
-		init: function() {
+		init: function () {
 			Game.prefs.epicSugarFrenzy = this.enabled;
 		},
-		toggle: function() {
+		toggle: function () {
 			this.enabled = !this.enabled
 		},
-		canAscend: function() {
+		canAscend: function () {
 			if (!this.enabled || !Game.Upgrades['Sugar frenzy'].unlocked) return true;
 			return Game.Upgrades['Sugar frenzy'].bought;
 		}
 	}
 };
-epicCookie.init()
-
