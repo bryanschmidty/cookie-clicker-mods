@@ -1359,3 +1359,4 @@ var epicCookie = {
 		}
 	}
 };
+epicCookie.init();
